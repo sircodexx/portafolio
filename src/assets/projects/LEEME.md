@@ -6,6 +6,6 @@ El nombre del archivo debe coincidir con el campo `image` de `src/content.js`:
 - `nistrack.webp`
 - `termometro.webp`
 - `keptai.webp`
-- `agrimonitor.webp` (pendiente)
+- `agrimonitor.webp`
 
-Si falta una imagen, la tarjeta muestra una vista previa ilustrada.
+Si falta una imagen, la tarjeta muestra una ilustración de código.

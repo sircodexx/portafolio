@@ -106,8 +106,8 @@ export const content = {
           [{ b: 'Reportes y IA:' }, { t: ' orquesté la exportación de reportes de auditoría en PDF generados en el servidor y dirigí la arquitectura bajo un flujo de desarrollo asistido por IA.' }],
         ] },
         { role: 'Auxiliar de Atención al Cliente', company: 'Promart Homecenter', place: 'Piura, Perú', period: 'Ago 2023 — Sep 2026', points: [
-          [{ b: 'Soporte crítico:' }, { t: ' resolví incidentes técnicos y operativos bajo presión, garantizando la satisfacción del cliente.' }],
-          [{ b: 'Comunicación:' }, { t: ' comunicación efectiva entre áreas y trabajo orientado a metas comerciales y métricas de calidad de servicio.' }],
+          [{ b: 'Atención al público:' }, { t: ' gestión directa de consultas y orientación al cliente, asegurando una experiencia de compra fluida y positiva.' }],
+          [{ b: 'Desarrollo de soft skills:' }, { t: ' fortalecimiento de habilidades interpersonales clave como comunicación efectiva, trabajo en equipo, empatía y resolución ágil de inconvenientes diarios en un entorno comercial de alta demanda.' }],
         ] },
       ],
       educationTitle: 'Educación',
@@ -204,8 +204,8 @@ export const content = {
           [{ b: 'Reports & AI:' }, { t: ' orchestrated server-rendered PDF audit report exports and led the architecture under an AI-assisted development workflow.' }],
         ] },
         { role: 'Customer Service Assistant', company: 'Promart Homecenter', place: 'Piura, Peru', period: 'Aug 2023 — Sep 2026', points: [
-          [{ b: 'Critical support:' }, { t: ' resolved technical and operational incidents under pressure, ensuring customer satisfaction.' }],
-          [{ b: 'Communication:' }, { t: ' effective cross-team communication, working toward sales goals and service quality metrics.' }],
+          [{ b: 'Customer service:' }, { t: ' handled customer inquiries and guidance directly, ensuring a smooth and positive shopping experience.' }],
+          [{ b: 'Soft skills:' }, { t: ' strengthened key interpersonal skills such as effective communication, teamwork, empathy and quick resolution of everyday issues in a high-demand retail environment.' }],
         ] },
       ],
       educationTitle: 'Education',

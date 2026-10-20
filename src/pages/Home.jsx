@@ -218,13 +218,14 @@ function WallColumn({ tiles, progress, speed }) {
 }
 
 function ExperimentWall() {
+  const { t } = useLang()
   const ref = useRef(null)
   const reduce = useReducedMotion()
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const speeds = reduce ? [0, 0, 0, 0] : [40, 110, 20, 80]
   const mobile = [[...wallColumns[0], ...wallColumns[2]], [...wallColumns[1], ...wallColumns[3]]]
   return (
-    <section ref={ref} aria-label="Laboratorio" className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden py-16">
+    <section ref={ref} aria-label={t.works.tabs.lab} className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden py-16">
       <div className="hidden grid-cols-4 gap-3 px-3 md:grid">{wallColumns.map((tiles, i) => <WallColumn key={i} tiles={tiles} progress={scrollYProgress} speed={speeds[i]} />)}</div>
       <div className="grid grid-cols-2 gap-2 px-2 md:hidden">{mobile.map((tiles, i) => <WallColumn key={i} tiles={tiles} progress={scrollYProgress} speed={reduce ? 0 : i ? 50 : 15} />)}</div>
     </section>
