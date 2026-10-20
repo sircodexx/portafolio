@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Despliegue y herramientas locales
+.vercel
+.openai
+.claude
+CONTEXTO_PARA_CLAUDE.md

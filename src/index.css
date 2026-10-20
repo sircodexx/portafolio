@@ -1,17 +1,27 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
+@theme {
+  --color-paper: #f4f4f1;
+  --color-ink: #2e2e2e;
+  --color-rust: #b2421a;
+  --color-leaf: #5ec41b;
+}
 @layer base {
-  :root { color-scheme: dark; font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-  html { scroll-behavior: smooth; scroll-padding-top: 2rem; }
-  body { @apply m-0 min-w-[320px] bg-zinc-950 font-sans text-zinc-100; }
-  ::selection { @apply bg-lime-300 text-zinc-950; }
-  a:focus-visible { @apply rounded outline outline-2 outline-offset-4 outline-lime-300; }
+  :root { color-scheme: light; font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  html { scroll-padding-top: 5rem; }
+  html, body { overflow-x: clip; }
+  body {
+    @apply m-0 min-w-[320px] bg-paper font-sans text-ink;
+    background-image: linear-gradient(rgba(30, 30, 30, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(30, 30, 30, 0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  ::selection { @apply bg-rust text-white; }
+  a:focus-visible, button:focus-visible { @apply rounded outline-2 outline-offset-4 outline-rust; }
 }
 @layer components {
-  .eyebrow { @apply mb-3 font-mono text-xs uppercase tracking-widest text-lime-300; }
-  .section-title { @apply text-3xl font-semibold tracking-tight; }
+  .hand { @apply font-hand leading-tight text-zinc-500; }
+  .display { @apply font-display font-bold tracking-[-0.045em] text-ink; }
 }
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
