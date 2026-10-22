@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://portafoliomiguel-yamunaque.vercel.app/sitemap.xml

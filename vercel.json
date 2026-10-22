@@ -4,5 +4,9 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "redirects": [
+    { "source": "/sobre-mi", "destination": "/#sobre-mi", "permanent": true },
+    { "source": "/proyectos", "destination": "/#proyectos", "permanent": true }
+  ],
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
