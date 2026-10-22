@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ArrowRight, ArrowUpRight, Award, Code2, Download, FileText, GitBranch, Github, GraduationCap, LayoutDashboard, Linkedin, Mail, MapPin, Network, Scale, Server } from 'lucide-react'
 import { siDocker, siGit, siLaravel, siMysql, siNextdotjs, siOpenjdk, siPhp, siPostgresql, siReact, siSpringboot, siTypescript, siVitest } from 'simple-icons'
 import { contact, lab, projectFilters, projects, stackMain, stackMore } from '../content.js'
-import { aboutImages, external, projectImages, useLang } from '../lib.js'
+import { aboutImages, external, projectImages, projectPath, useLang } from '../lib.js'
 import { Rich } from '../components/Core.jsx'
 import { Button, Card, Reveal, Section, SectionLabel, Stat, Tag, Terminal, Timeline } from '../components/Ui.jsx'
 
@@ -139,7 +139,8 @@ function ProjectCard({ project, index }) {
         <p className="mt-3 leading-relaxed text-muted">{item.summary}</p>
         <div className="mt-5 flex flex-wrap gap-2">{project.tags.map(tag => <Tag key={tag}>{pick(tag)}</Tag>)}</div>
         <div className="mt-auto flex flex-wrap gap-3 pt-8">
-          {project.live && <Button href={project.live} icon={ArrowUpRight} {...external(project.live)} aria-label={`${p.cta[item.liveCta ?? 'live']}: ${name} (${p.newTab})`}>{p.cta[item.liveCta ?? 'live']}</Button>}
+          <Button to={projectPath(project.key)} icon={ArrowRight}>{p.cta.case}</Button>
+          {project.live && <Button href={project.live} variant="secondary" icon={ArrowUpRight} {...external(project.live)} aria-label={`${p.cta[item.liveCta ?? 'live']}: ${name} (${p.newTab})`}>{p.cta[item.liveCta ?? 'live']}</Button>}
           {project.code && <Button href={project.code} variant="secondary" icon={Github} {...external(project.code)} aria-label={`${p.cta.code}: ${name} (${p.newTab})`}>{p.cta.code}</Button>}
         </div>
       </div>

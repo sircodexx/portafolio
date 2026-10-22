@@ -17,7 +17,6 @@ export function LangProvider({ children }) {
   const t = content[lang]
   useEffect(() => {
     document.documentElement.lang = lang
-    document.title = t.meta.title
     document.querySelector('meta[name="description"]')?.setAttribute('content', t.meta.description)
     try { localStorage.setItem('lang', lang) } catch { /* almacenamiento no disponible */ }
   }, [lang, t])

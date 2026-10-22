@@ -1,7 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
-// Rutas de la web. Las de la v1 (/proyectos y /sobre-mi) llevan a su sección del inicio.
+// Rutas de la web: el inicio y un caso de estudio por proyecto (/proyectos/<key>).
+// Las de la v1 (/proyectos y /sobre-mi) llevan a su sección del inicio.
 export const routes = { home: '/' }
+export const projectPath = key => `/proyectos/${key}`
+export const projectFromPath = path => path.match(/^\/proyectos\/([\w-]+)$/)?.[1]
 export const legacyRoutes = { '/proyectos': 'proyectos', '/sobre-mi': 'sobre-mi' }
 
 // Secciones del inicio, en orden. `nav`: aparece en el menú (contacto va como botón aparte).

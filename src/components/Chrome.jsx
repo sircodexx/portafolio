@@ -4,23 +4,24 @@ import { contact } from '../content.js'
 import { external, routes, sections, useLang } from '../lib.js'
 import { Link } from './Core.jsx'
 
-// Sección visible ahora mismo, para marcarla en el menú.
-function useActiveSection() {
+// Sección visible ahora mismo, para marcarla en el menú (solo en el inicio).
+function useActiveSection(enabled) {
   const [active, setActive] = useState(null)
   useEffect(() => {
+    if (!enabled) return
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => { if (entry.isIntersecting) setActive(entry.target.id) })
     }, { rootMargin: '-45% 0px -50% 0px' })
     sections.forEach(({ id }) => { const el = document.getElementById(id); if (el) observer.observe(el) })
     return () => observer.disconnect()
-  }, [])
-  return active
+  }, [enabled])
+  return enabled ? active : null
 }
 
 export function Header({ onHome }) {
   const { t, lang, setLang } = useLang()
   const [open, setOpen] = useState(false)
-  const active = useActiveSection()
+  const active = useActiveSection(onHome)
   // En los casos de estudio las anclas apuntan al inicio.
   const href = id => `${onHome ? '' : routes.home}#${id}`
   const links = sections.filter(s => s.nav)

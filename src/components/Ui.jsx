@@ -1,4 +1,6 @@
 import { motion } from 'motion/react'
+import { ArrowDown, ArrowRight } from 'lucide-react'
+import { Link } from './Core.jsx'
 
 // Piezas base del diseño v2. Los colores salen de los tokens de src/theme.css.
 
@@ -29,14 +31,16 @@ export function SectionLabel({ index, children }) {
   return <p className="font-mono text-xs tracking-wide text-accent sm:text-sm">// {index && <>{index} · </>}{children}</p>
 }
 
-export function Button({ href, variant = 'primary', icon: Icon, children, ...props }) {
+// Botón con forma de enlace: `to` navega dentro de la web, `href` es un enlace normal.
+export function Button({ href, to, variant = 'primary', icon: Icon, children, ...props }) {
   const styles = variant === 'primary'
     ? 'bg-accent text-accent-ink hover:brightness-110'
     : 'border border-line bg-surface/60 text-fg hover:border-accent/60 hover:text-accent'
+  const Element = to ? Link : 'a'
   return (
-    <a href={href} className={`inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition ${styles}`} {...props}>
+    <Element {...(to ? { to } : { href })} className={`inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition ${styles}`} {...props}>
       {Icon && <Icon size={16} aria-hidden="true" />}{children}
-    </a>
+    </Element>
   )
 }
 
@@ -89,5 +93,43 @@ export function Timeline({ items }) {
         </li>
       ))}
     </ol>
+  )
+}
+
+// Diagrama de arquitectura: `flow` es el camino principal (la pieza central se resalta)
+// y `extras` los servicios conectados a ella. Recibe los textos ya traducidos.
+export function Diagram({ flow, extras = [], extrasLabel }) {
+  const center = Math.floor(flow.length / 2)
+  return (
+    <figure className="rounded-2xl border border-line bg-surface p-5 sm:p-8">
+      <ol className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
+        {flow.map((node, i) => (
+          <li key={node.title} className="contents">
+            {i > 0 && (
+              <span className="flex justify-center text-muted" aria-hidden="true">
+                <ArrowDown size={18} className="sm:hidden" /><ArrowRight size={18} className="hidden sm:block" />
+              </span>
+            )}
+            <div className={`flex-1 rounded-xl border p-4 text-center ${i === center ? 'border-accent/70 bg-accent/5' : 'border-line bg-surface-2'}`}>
+              <p className="font-semibold text-fg">{node.title}</p>
+              <p className="mt-1 font-mono text-xs text-muted">{node.sub}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      {extras.length > 0 && (
+        <div className="mt-6 border-t border-dashed border-line pt-6">
+          <p className="font-mono text-xs uppercase tracking-widest text-muted">{extrasLabel}</p>
+          <ul className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {extras.map(node => (
+              <li key={node.title} className="rounded-xl border border-dashed border-line p-4">
+                <p className="text-sm font-semibold text-fg">{node.title}</p>
+                <p className="mt-1 font-mono text-xs text-muted">{node.sub}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </figure>
   )
 }
