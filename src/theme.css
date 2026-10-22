@@ -1,14 +1,15 @@
-/* Tokens del diseño v2: paleta Grafito + Ámbar. Cambiar la paleta es cambiar este bloque. */
+/* Tokens del diseño: paleta Pizarra + Lima. Cambiar la paleta es cambiar este bloque.
+   accent = color principal (lima); accent-2 = color secundario (cian) para roles, líneas y la línea de tiempo. */
 :root {
-  --p-bg: #0f1115;
-  --p-surface: #171a21;
-  --p-surface-2: #1e222b;
-  --p-line: #2a2f3a;
-  --p-fg: #e8e6e3;
-  --p-muted: #9aa0aa;
-  --p-accent: #f5a524;
-  --p-accent-ink: #1a1206;
-  --p-accent-2: #7aa2f7;
+  --p-bg: #111315;
+  --p-surface: #181b1e;
+  --p-surface-2: #1f2326;
+  --p-line: #2b3034;
+  --p-fg: #ececec;
+  --p-muted: #a1a7ad;
+  --p-accent: #a3e635;
+  --p-accent-ink: #12180a;
+  --p-accent-2: #22d3ee;
 }
 
 @theme inline {

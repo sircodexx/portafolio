@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Github, Linkedin, Mail, Menu, X } from 'lucide-react'
-import { contact } from '../content.js'
-import { external, routes, sections, useLang } from '../lib.js'
+import { Languages, Mail, Menu, X } from 'lucide-react'
+import { routes, sections, useLang } from '../lib.js'
 import { Link } from './Core.jsx'
 
 // Sección visible ahora mismo, para marcarla en el menú (solo en el inicio).
@@ -25,30 +24,35 @@ export function Header({ onHome }) {
   // En los casos de estudio las anclas apuntan al inicio.
   const href = id => `${onHome ? '' : routes.home}#${id}`
   const links = sections.filter(s => s.nav)
+  const other = lang === 'es' ? 'EN' : 'ES'
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line/70 bg-bg/80 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-4">
-        <Link to={routes.home} className="text-sm font-bold tracking-tight text-fg sm:text-base">Miguel Yamunaqué<span className="text-accent">.</span></Link>
-        <nav aria-label={t.nav.label} className="hidden items-center gap-7 text-sm lg:flex">
+    <header className="sticky top-0 z-40 bg-bg/85 backdrop-blur">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-4 sm:px-8">
+        <Link to={routes.home} className="text-xl font-extrabold tracking-tight text-fg sm:text-2xl">Miguel <span className="text-accent">Yamunaqué</span></Link>
+        <nav aria-label={t.nav.label} className="hidden items-center gap-7 lg:flex">
           {links.map(({ id, key }) => (
-            <a key={id} href={href(id)} aria-current={active === id ? 'true' : undefined} className={`transition hover:text-fg ${active === id ? 'text-fg' : 'text-muted'}`}>{t.nav[key]}</a>
+            <a key={id} href={href(id)} aria-current={active === id ? 'true' : undefined}
+              className={`border-b-2 pb-0.5 text-[15px] font-medium transition hover:text-accent ${active === id ? 'border-accent text-accent' : 'border-transparent text-fg'}`}>{t.nav[key]}</a>
           ))}
         </nav>
-        <div className="flex items-center gap-2 sm:gap-3">
-          <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={`ES / EN · ${t.langButton}`} title={t.langButton} className="rounded-md px-2 py-1 font-mono text-xs text-muted transition hover:text-fg">
-            <span className={lang === 'es' ? 'text-accent' : ''}>ES</span> / <span className={lang === 'en' ? 'text-accent' : ''}>EN</span>
+        <div className="flex items-center gap-3">
+          <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={`${other} · ${t.langButton}`} title={t.langButton}
+            className="flex items-center gap-1.5 rounded-full border border-line px-3 py-2 text-sm text-muted transition hover:border-accent/60 hover:text-fg">
+            <Languages size={16} aria-hidden="true" />{other}
           </button>
-          <a href={href('contacto')} className="hidden rounded-lg border border-accent/60 px-4 py-2 text-sm font-semibold text-accent transition hover:bg-accent hover:text-accent-ink sm:inline-block">{t.nav.contact}</a>
-          <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="menu-movil" aria-label={open ? t.menu.close : t.menu.open} className="grid size-9 place-items-center rounded-lg border border-line text-fg lg:hidden">
+          <a href={href('contacto')} className="hidden items-center gap-2 rounded-lg bg-linear-to-r from-accent to-accent-2 px-5 py-2.5 text-[15px] font-semibold text-accent-ink transition hover:brightness-110 sm:flex">
+            <Mail size={17} aria-hidden="true" />{t.nav.contact}
+          </a>
+          <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="menu-movil" aria-label={open ? t.menu.close : t.menu.open} className="grid size-10 place-items-center rounded-lg border border-line text-fg lg:hidden">
             {open ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
           </button>
         </div>
       </div>
       {open && (
-        <nav id="menu-movil" aria-label={t.nav.label} className="border-t border-line bg-bg px-5 py-4 lg:hidden">
+        <nav id="menu-movil" aria-label={t.nav.label} className="border-t border-line bg-bg px-5 py-3 lg:hidden">
           {[...links, { id: 'contacto', key: 'contact' }].map(({ id, key }) => (
-            <a key={id} href={href(id)} onClick={() => setOpen(false)} className="block border-b border-line/60 py-3 text-base text-muted last:border-0 hover:text-fg">{t.nav[key]}</a>
+            <a key={id} href={href(id)} onClick={() => setOpen(false)} className="block border-b border-line/60 py-3 text-base text-fg last:border-0 hover:text-accent">{t.nav[key]}</a>
           ))}
         </nav>
       )}
@@ -58,24 +62,11 @@ export function Header({ onHome }) {
 
 const year = new Date().getFullYear()
 
-const social = [
-  { key: 'email', href: `mailto:${contact.email}`, icon: Mail },
-  { key: 'linkedin', href: contact.linkedin, icon: Linkedin },
-  { key: 'github', href: contact.github, icon: Github },
-]
-
 export function Footer() {
   const { t } = useLang()
   return (
-    <footer className="border-t border-line">
-      <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 px-5 py-8 text-sm text-muted sm:flex-row sm:items-center">
-        <p>© {year} Miguel Yamunaqué Villegas · <span className="font-mono text-xs">{t.footer}</span></p>
-        <div className="flex gap-1">
-          {social.map(({ key, href, icon: Icon }) => (
-            <a key={key} href={href} {...external(href)} aria-label={t.contact.links[key]} title={t.contact.links[key]} className="grid size-9 place-items-center rounded-lg transition hover:bg-surface hover:text-accent"><Icon size={18} aria-hidden="true" /></a>
-          ))}
-        </div>
-      </div>
+    <footer className="bg-surface">
+      <p className="mx-auto max-w-7xl px-5 py-10 text-center text-sm text-muted">© {year} Miguel Yamunaqué Villegas · {t.footer}</p>
     </footer>
   )
 }

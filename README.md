@@ -8,7 +8,7 @@ SPA en una sola página con estructura tipo CV, casos de estudio por proyecto y 
 
 ## Qué incluye
 
-- **Inicio (`/`):** sobre mí con tarjeta de terminal, cifras, especialidades y stack, experiencia, proyectos con filtros, laboratorio, formación y certificados, y contacto.
+- **Inicio (`/`):** sobre mí con foto, especialidades y stack, experiencia, proyectos y laboratorio en una sola cuadrícula, formación y certificados en línea de tiempo por año, y contacto.
 - **Casos de estudio (`/proyectos/<proyecto>`):** contexto, producto, rol, diagrama de arquitectura, decisiones técnicas, resultado, galería y siguiente proyecto.
 - **Rutas de la v1:** `/sobre-mi` y `/proyectos` redirigen a su sección del inicio (`vercel.json` y, en local, el router).
 - **Bilingüe ES / EN**, con detección del idioma del navegador y preferencia guardada.
@@ -51,13 +51,13 @@ En PowerShell usa `npm.cmd` si `npm` está bloqueado por la política de ejecuci
 src/
 ├── content.js            # TODO el contenido (ES/EN): proyectos, casos, experiencia, stack, certificados
 ├── lib.js                # rutas, router mínimo, secciones, idioma e imágenes
-├── theme.css             # paleta Grafito + Ámbar y fuentes (tokens de Tailwind)
+├── theme.css             # paleta Pizarra + Lima y fuentes (tokens de Tailwind)
 ├── index.css             # estilos base y animación de aparición
 ├── App.jsx               # layout, rutas y analítica
 ├── components/
 │   ├── Chrome.jsx        # header con menú y footer
 │   ├── Core.jsx          # Link, LangProvider, texto enriquecido
-│   └── Ui.jsx            # Section, Button, Tag, Card, Terminal, Stat, Timeline, Diagram, Reveal
+│   └── Ui.jsx            # Section, Eyebrow, Button, Tag, Card, IconCircle, Bullet, Diagram, Reveal
 ├── pages/
 │   ├── Home.jsx          # inicio con todas las secciones
 │   └── Project.jsx       # caso de estudio

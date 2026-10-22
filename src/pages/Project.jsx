@@ -2,12 +2,14 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, Github } from 'lucide-react'
 import { projects } from '../content.js'
 import { external, projectImages, projectPath, routes, useLang, wallImages } from '../lib.js'
 import { Link } from '../components/Core.jsx'
-import { Button, Diagram, Reveal, SectionLabel, Tag } from '../components/Ui.jsx'
+import { Bullet, Button, Diagram, Eyebrow, Reveal, Tag } from '../components/Ui.jsx'
+
+const heading = 'text-xs font-semibold uppercase tracking-[0.2em] text-accent-2'
 
 function Block({ title, children }) {
   return (
     <Reveal as="section" className="border-t border-line pt-8">
-      <h2 className="font-mono text-xs uppercase tracking-widest text-accent">{title}</h2>
+      <h2 className={heading}>{title}</h2>
       <div className="mt-4 space-y-4 leading-relaxed text-muted sm:text-lg">{children}</div>
     </Reveal>
   )
@@ -19,7 +21,7 @@ function Points({ items, numbered }) {
     <List className="space-y-4">
       {items.map((item, i) => (
         <li key={item.b} className="flex gap-4">
-          <span className="mt-0.5 shrink-0 font-mono text-sm text-accent">{numbered ? String(i + 1).padStart(2, '0') : '—'}</span>
+          {numbered ? <span className="mt-0.5 shrink-0 font-mono text-sm font-medium text-accent">{String(i + 1).padStart(2, '0')}</span> : <Bullet />}
           <p><b className="font-semibold text-fg">{item.b}:</b> {item.t}</p>
         </li>
       ))}
@@ -40,16 +42,16 @@ export default function Project({ projectKey }) {
   const pickNode = node => ({ title: pick(node.title), sub: pick(node.sub) })
 
   return (
-    <article className="mx-auto max-w-6xl px-5 pb-24 pt-10 sm:pt-14">
+    <article className="mx-auto max-w-7xl px-5 pb-24 pt-10 sm:px-8 sm:pt-14">
       <Link to={`${routes.home}#proyectos`} className="inline-flex items-center gap-2 text-sm text-muted transition hover:text-accent"><ArrowLeft size={16} aria-hidden="true" />{c.back}</Link>
 
       <Reveal className="mt-10 max-w-3xl">
-        <SectionLabel>{c.label}</SectionLabel>
+        <Eyebrow>{c.label}</Eyebrow>
         <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-fg sm:text-5xl">{name}</h1>
         <p className="mt-4 text-lg leading-relaxed text-muted sm:text-xl">{item.summary}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           {project.live && <Button href={project.live} icon={ArrowUpRight} {...external(project.live)}>{liveCta}</Button>}
-          {project.code && <Button href={project.code} variant="secondary" icon={Github} {...external(project.code)}>{t.projects.cta.code}</Button>}
+          {project.code && <Button href={project.code} variant="outline" icon={Github} {...external(project.code)}>{t.projects.cta.code}</Button>}
         </div>
       </Reveal>
 
@@ -78,7 +80,7 @@ export default function Project({ projectKey }) {
 
         <aside className="lg:sticky lg:top-24 lg:self-start">
           <Reveal className="rounded-2xl border border-line bg-surface p-6">
-            <h2 className="font-mono text-xs uppercase tracking-widest text-muted">{c.summary}</h2>
+            <h2 className={heading}>{c.summary}</h2>
             <dl className="mt-5 space-y-4 text-sm">
               <div><dt className="text-muted">{c.fields.role}</dt><dd className="mt-1 font-medium text-fg">{data.role}</dd></div>
               <div><dt className="text-muted">{c.fields.org}</dt><dd className="mt-1 font-medium text-fg">{item.org}</dd></div>
@@ -91,7 +93,7 @@ export default function Project({ projectKey }) {
 
       {project.gallery.length > 0 && (
         <Reveal as="section" className="mt-20">
-          <h2 className="font-mono text-xs uppercase tracking-widest text-accent">{c.sections.gallery}</h2>
+          <h2 className={heading}>{c.sections.gallery}</h2>
           <div className="mt-6 gap-4 sm:columns-2">
             {project.gallery.map((key, i) => (
               <a key={key} href={wallImages[key]} target="_blank" rel="noopener noreferrer" aria-label={`${t.projects.shot} ${name} ${i + 1} (${c.openImage})`}
@@ -106,7 +108,7 @@ export default function Project({ projectKey }) {
       <Reveal className="mt-20">
         <Link to={projectPath(next.key)} className="group flex items-center justify-between gap-6 rounded-2xl border border-line bg-surface p-6 transition hover:border-accent/50 sm:p-8">
           <span>
-            <span className="font-mono text-xs uppercase tracking-widest text-muted">{c.next}</span>
+            <span className={heading}>{c.next}</span>
             <span className="mt-2 block text-2xl font-bold text-fg">{pick(next.name)}</span>
           </span>
           <ArrowRight size={24} className="shrink-0 text-accent transition group-hover:translate-x-1" aria-hidden="true" />

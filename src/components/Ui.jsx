@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ArrowDown, ArrowRight } from 'lucide-react'
 import { Link } from './Core.jsx'
 
-// Piezas base del diseño v2. Los colores salen de los tokens de src/theme.css.
+// Piezas base del diseño. Los colores salen de los tokens de src/theme.css.
 
 // Aparición suave al entrar en pantalla. La animación es CSS (.reveal en index.css)
 // y se desactiva con prefers-reduced-motion.
@@ -25,12 +25,21 @@ export function Reveal({ as: Element = 'div', delay = 0, className = '', childre
   )
 }
 
-export function Section({ id, index, label, title, subtitle, children, className = '' }) {
+// Antetítulo en mayúsculas con líneas: a ambos lados si está centrado, solo a la izquierda si no.
+export function Eyebrow({ center, children }) {
   return (
-    <section id={id} className={`mx-auto max-w-6xl scroll-mt-24 px-5 py-20 sm:py-28 ${className}`}>
-      <Reveal className="mb-12 max-w-2xl">
-        <SectionLabel index={index}>{label}</SectionLabel>
-        <h2 className="mt-3 text-3xl font-bold tracking-tight text-fg sm:text-4xl">{title}</h2>
+    <p className={`flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-accent-2 ${center ? 'justify-center' : ''}`}>
+      <span className="h-px w-10 bg-accent-2/70" aria-hidden="true" />{children}{center && <span className="h-px w-10 bg-accent-2/70" aria-hidden="true" />}
+    </p>
+  )
+}
+
+export function Section({ id, label, title, subtitle, children, className = '' }) {
+  return (
+    <section id={id} className={`mx-auto max-w-7xl scroll-mt-20 px-5 py-20 sm:px-8 sm:py-28 ${className}`}>
+      <Reveal className="mx-auto mb-14 max-w-2xl text-center">
+        <Eyebrow center>{label}</Eyebrow>
+        <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-fg sm:text-4xl">{title}</h2>
         {subtitle && <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">{subtitle}</p>}
       </Reveal>
       {children}
@@ -38,73 +47,45 @@ export function Section({ id, index, label, title, subtitle, children, className
   )
 }
 
-export function SectionLabel({ index, children }) {
-  return <p className="font-mono text-xs tracking-wide text-accent sm:text-sm">// {index && <>{index} · </>}{children}</p>
+const buttonStyles = {
+  primary: 'bg-accent text-accent-ink hover:brightness-110',
+  outline: 'border border-accent text-accent hover:bg-accent/10',
+  gradient: 'bg-linear-to-r from-accent to-accent-2 text-accent-ink hover:brightness-110',
+  ghost: 'border border-line text-fg hover:border-accent/60 hover:text-accent',
 }
 
 // Botón con forma de enlace: `to` navega dentro de la web, `href` es un enlace normal.
-export function Button({ href, to, variant = 'primary', icon: Icon, children, ...props }) {
-  const styles = variant === 'primary'
-    ? 'bg-accent text-accent-ink hover:brightness-110'
-    : 'border border-line bg-surface/60 text-fg hover:border-accent/60 hover:text-accent'
+export function Button({ href, to, variant = 'primary', icon: Icon, className = '', children, ...props }) {
   const Element = to ? Link : 'a'
   return (
-    <Element {...(to ? { to } : { href })} className={`inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition ${styles}`} {...props}>
-      {Icon && <Icon size={16} aria-hidden="true" />}{children}
+    <Element {...(to ? { to } : { href })} className={`inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition sm:text-base ${buttonStyles[variant]} ${className}`} {...props}>
+      {Icon && <Icon size={18} aria-hidden="true" />}{children}
     </Element>
   )
 }
 
 export function Tag({ children }) {
-  return <span className="rounded-md border border-line bg-surface-2 px-2 py-1 font-mono text-[11px] leading-none text-muted sm:text-xs">{children}</span>
+  return <span className="inline-block rounded-full border border-accent/40 bg-accent/5 px-2.5 py-0.5 text-xs font-medium text-accent">{children}</span>
+}
+
+// Ícono dentro de un círculo. `tone`: dark (fondo oscuro, ícono lima), accent (lima) o accent-2 (cian).
+const iconTones = {
+  dark: 'border-line bg-bg text-accent',
+  accent: 'border-accent/20 bg-accent/10 text-accent',
+  'accent-2': 'border-accent-2/20 bg-accent-2/10 text-accent-2',
+}
+export function IconCircle({ icon: Icon, size = 'md', tone = 'dark' }) {
+  const box = size === 'lg' ? 'size-16' : size === 'sm' ? 'size-12' : 'size-14'
+  return <span className={`grid shrink-0 place-items-center rounded-full border ${box} ${iconTones[tone]}`}><Icon size={size === 'lg' ? 28 : 22} aria-hidden="true" /></span>
 }
 
 export function Card({ className = '', children }) {
-  return <div className={`rounded-xl border border-line bg-surface p-6 transition hover:-translate-y-0.5 hover:border-accent/40 ${className}`}>{children}</div>
+  return <div className={`rounded-xl border border-line bg-surface ${className}`}>{children}</div>
 }
 
-// Ventana de terminal. `lines`: [{ cmd }] para un comando o [{ out }] / [{ key, value }] para la salida.
-export function Terminal({ title = 'zsh', lines }) {
-  return (
-    <div className="overflow-hidden rounded-xl border border-line bg-surface shadow-2xl shadow-black/30">
-      <div className="flex items-center gap-2 border-b border-line bg-surface-2 px-4 py-3">
-        <span className="size-2.5 rounded-full bg-line" /><span className="size-2.5 rounded-full bg-line" /><span className="size-2.5 rounded-full bg-line" />
-        <span className="ml-2 font-mono text-xs text-muted">{title}</span>
-      </div>
-      <div className="space-y-1 overflow-x-auto p-5 font-mono text-[13px] leading-relaxed sm:text-sm">
-        {lines.map((line, i) => line.cmd
-          ? <p key={i} className={i ? 'pt-3' : ''}><span className="text-accent">$</span> <span className="text-fg">{line.cmd}</span></p>
-          : line.key
-            ? <p key={i} className="whitespace-nowrap"><span className="inline-block w-20 text-accent-2">{line.key}</span><span className="text-muted">{line.value}</span></p>
-            : <p key={i} className="text-muted">{line.out}</p>)}
-      </div>
-    </div>
-  )
-}
-
-export function Stat({ value, label }) {
-  return (
-    <div className="border-l border-line pl-4">
-      <p className="font-mono text-2xl font-medium text-fg sm:text-3xl">{value}</p>
-      <p className="mt-1 text-sm text-muted">{label}</p>
-    </div>
-  )
-}
-
-// Línea de tiempo vertical. `items`: [{ role, org, place, period, current, children }]
-export function Timeline({ items }) {
-  return (
-    <ol className="relative space-y-12 border-l border-line pl-8">
-      {items.map(item => (
-        <li key={item.role + item.org} className="relative">
-          <span className={`absolute -left-[37px] top-1.5 size-2.5 rounded-full ring-4 ring-bg ${item.current ? 'bg-accent' : 'bg-line'}`} />
-          <p className="font-mono text-xs text-muted">{item.period} · {item.place}</p>
-          <h3 className="mt-2 text-xl font-semibold text-fg">{item.role} <span className="text-muted">·</span> <span className="text-accent">{item.org}</span></h3>
-          <div className="mt-4">{item.children}</div>
-        </li>
-      ))}
-    </ol>
-  )
+// Viñeta del diseño: punto del color principal.
+export function Bullet() {
+  return <span className="mt-[0.6em] size-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
 }
 
 // Diagrama de arquitectura: `flow` es el camino principal (la pieza central se resalta)
@@ -130,7 +111,7 @@ export function Diagram({ flow, extras = [], extrasLabel }) {
       </ol>
       {extras.length > 0 && (
         <div className="mt-6 border-t border-dashed border-line pt-6">
-          <p className="font-mono text-xs uppercase tracking-widest text-muted">{extrasLabel}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">{extrasLabel}</p>
           <ul className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {extras.map(node => (
               <li key={node.title} className="rounded-xl border border-dashed border-line p-4">

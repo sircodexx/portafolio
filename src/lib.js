@@ -13,7 +13,6 @@ export const sections = [
   { id: 'especialidades', key: 'skills', nav: true },
   { id: 'experiencia', key: 'experience', nav: true },
   { id: 'proyectos', key: 'projects', nav: true },
-  { id: 'laboratorio', key: 'lab' },
   { id: 'formacion', key: 'education', nav: true },
   { id: 'contacto', key: 'contact' },
 ]
@@ -58,5 +57,5 @@ export function initialLang() {
 const byName = modules => Object.fromEntries(Object.entries(modules).map(([path, url]) => [path.split('/').pop().replace(/\.\w+$/, ''), url]))
 export const projectImages = byName(import.meta.glob('./assets/projects/*.{jpg,jpeg,png,webp}', { eager: true, import: 'default' }))
 export const wallImages = byName(import.meta.glob('./assets/wall/*.{jpg,jpeg,png,webp}', { eager: true, import: 'default' }))
-// Foto del inicio: versión pequeña (168 px) de assets/about/miguel.webp, que se usa para og.png.
-export { default as avatar } from './assets/about/miguel-avatar.webp'
+// Foto del inicio (también es la base de public/og.png).
+export { default as photo } from './assets/about/miguel.webp'

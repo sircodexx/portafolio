@@ -5,14 +5,13 @@
   :root { color-scheme: dark; font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
   html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
   html, body { overflow-x: clip; }
-  /* Fondo con un brillo tenue del acento y una retícula de puntos casi invisible. */
+  /* Fondo liso con dos brillos muy tenues (secundario arriba a la izquierda, acento abajo a la derecha). */
   body {
     @apply m-0 min-w-[320px] bg-bg font-sans text-fg;
     background-image:
-      radial-gradient(60rem 30rem at 85% -10%, color-mix(in srgb, var(--p-accent) 9%, transparent), transparent 70%),
-      radial-gradient(color-mix(in srgb, var(--p-fg) 7%, transparent) 1px, transparent 1px);
-    background-size: auto, 24px 24px;
-    background-repeat: no-repeat, repeat;
+      radial-gradient(50rem 40rem at 0% 0%, color-mix(in srgb, var(--p-accent-2) 5%, transparent), transparent 70%),
+      radial-gradient(50rem 40rem at 100% 100%, color-mix(in srgb, var(--p-accent) 4%, transparent), transparent 70%);
+    background-attachment: fixed;
   }
   ::selection { @apply bg-accent text-accent-ink; }
   a:focus-visible, button:focus-visible { @apply rounded-md outline-2 outline-offset-4 outline-accent; }
