@@ -1,16 +1,27 @@
-import { motion } from 'motion/react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowDown, ArrowRight } from 'lucide-react'
 import { Link } from './Core.jsx'
 
 // Piezas base del diseño v2. Los colores salen de los tokens de src/theme.css.
 
-// Aparición suave al entrar en pantalla (desactivada con prefers-reduced-motion vía MotionConfig).
-export function Reveal({ as = 'div', delay = 0, className, children }) {
-  const Tag = motion[as]
+// Aparición suave al entrar en pantalla. La animación es CSS (.reveal en index.css)
+// y se desactiva con prefers-reduced-motion.
+export function Reveal({ as: Element = 'div', delay = 0, className = '', children }) {
+  const ref = useRef(null)
+  const [shown, setShown] = useState(false)
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return
+      setShown(true)
+      observer.disconnect()
+    }, { rootMargin: '0px 0px -60px 0px' })
+    observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [])
   return (
-    <Tag className={className} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.5, delay, ease: [0.2, 0.7, 0.2, 1] }}>
+    <Element ref={ref} style={delay ? { transitionDelay: `${delay}s` } : undefined} className={`reveal ${shown ? 'is-visible' : ''} ${className}`}>
       {children}
-    </Tag>
+    </Element>
   )
 }
 

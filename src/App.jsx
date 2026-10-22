@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { MotionConfig } from 'motion/react'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { projects } from './content.js'
@@ -50,11 +49,11 @@ function Shell() {
 
 export default function App() {
   return (
-    <MotionConfig reducedMotion="user">
+    <>
       <LangProvider><Shell /></LangProvider>
       {/* Visitas y rendimiento real en el panel de Vercel (sin cookies). */}
       <Analytics />
       <SpeedInsights />
-    </MotionConfig>
+    </>
   )
 }

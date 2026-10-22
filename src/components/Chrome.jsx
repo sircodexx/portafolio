@@ -36,7 +36,7 @@ export function Header({ onHome }) {
           ))}
         </nav>
         <div className="flex items-center gap-2 sm:gap-3">
-          <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={t.langButton} title={t.langButton} className="rounded-md px-2 py-1 font-mono text-xs text-muted transition hover:text-fg">
+          <button type="button" onClick={() => setLang(lang === 'es' ? 'en' : 'es')} aria-label={`ES / EN · ${t.langButton}`} title={t.langButton} className="rounded-md px-2 py-1 font-mono text-xs text-muted transition hover:text-fg">
             <span className={lang === 'es' ? 'text-accent' : ''}>ES</span> / <span className={lang === 'en' ? 'text-accent' : ''}>EN</span>
           </button>
           <a href={href('contacto')} className="hidden rounded-lg border border-accent/60 px-4 py-2 text-sm font-semibold text-accent transition hover:bg-accent hover:text-accent-ink sm:inline-block">{t.nav.contact}</a>

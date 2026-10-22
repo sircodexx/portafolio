@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ArrowRight, ArrowUpRight, Award, Code2, Download, FileText, GitBranch, Github, GraduationCap, LayoutDashboard, Linkedin, Mail, MapPin, Network, Scale, Server } from 'lucide-react'
 import { siDocker, siGit, siLaravel, siMysql, siNextdotjs, siOpenjdk, siPhp, siPostgresql, siReact, siSpringboot, siTypescript, siVitest } from 'simple-icons'
 import { contact, lab, projectFilters, projects, stackMain, stackMore } from '../content.js'
-import { aboutImages, external, projectImages, projectPath, useLang } from '../lib.js'
+import { avatar, external, projectImages, projectPath, useLang } from '../lib.js'
 import { Rich } from '../components/Core.jsx'
 import { Button, Card, Reveal, Section, SectionLabel, Stat, Tag, Terminal, Timeline } from '../components/Ui.jsx'
 
@@ -13,10 +13,10 @@ function Hero() {
   const { t } = useLang()
   const h = t.hero
   return (
-    <section id="sobre-mi" className="mx-auto grid max-w-6xl scroll-mt-24 grid-cols-1 items-center gap-12 px-5 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.15fr_1fr]">
+    <section id="sobre-mi" className="mx-auto grid max-w-6xl scroll-mt-24 grid-cols-1 items-start gap-12 px-5 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.15fr_1fr]">
       <Reveal>
         <div className="flex items-center gap-4">
-          {aboutImages[0] && <img src={aboutImages[0]} alt={h.photoAlt} width="56" height="56" className="size-14 rounded-xl border border-line object-cover object-top" />}
+          <img src={avatar} alt={h.photoAlt} width="56" height="56" className="size-14 rounded-xl border border-line object-cover object-top" />
           <SectionLabel index="01">{h.label}</SectionLabel>
         </div>
         <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-fg sm:text-6xl">{h.name}</h1>
@@ -29,7 +29,7 @@ function Hero() {
           <Button href={contact.cv} variant="secondary" icon={Download} download>{h.ctaCv}</Button>
         </div>
       </Reveal>
-      <Reveal delay={0.1}><Terminal title="~/miguel" lines={h.terminal} /></Reveal>
+      <Reveal delay={0.1} className="lg:mt-24"><Terminal title="~/miguel" lines={h.terminal} /></Reveal>
     </section>
   )
 }
@@ -131,7 +131,7 @@ function ProjectCard({ project, index }) {
   return (
     <article className="group grid overflow-hidden rounded-2xl border border-line bg-surface transition hover:border-accent/40 lg:grid-cols-2">
       <div className={`overflow-hidden border-b border-line bg-surface-2 lg:border-b-0 ${index % 2 ? 'lg:order-2 lg:border-l' : 'lg:border-r'}`}>
-        <img src={projectImages[project.image]} alt={`${p.shot} ${name}`} loading="lazy" className="aspect-[16/10] h-full w-full object-cover object-top transition duration-500 group-hover:scale-[1.02]" />
+        <img src={projectImages[project.image]} alt={`${p.shot} ${name}`} width="1280" height="800" loading="lazy" className="aspect-[16/10] h-full w-full object-cover object-top transition duration-500 group-hover:scale-[1.02]" />
       </div>
       <div className="flex flex-col p-6 sm:p-8">
         <p className="font-mono text-xs text-muted">{item.org} · {project.year}</p>

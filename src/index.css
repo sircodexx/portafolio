@@ -17,7 +17,12 @@
   ::selection { @apply bg-accent text-accent-ink; }
   a:focus-visible, button:focus-visible { @apply rounded-md outline-2 outline-offset-4 outline-accent; }
 }
+@layer components {
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .reveal.is-visible { opacity: 1; transform: none; }
+}
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }

@@ -54,7 +54,7 @@ export default function Project({ projectKey }) {
       </Reveal>
 
       <Reveal className="mt-12 overflow-hidden rounded-2xl border border-line bg-surface-2">
-        <img src={projectImages[project.image]} alt={`${t.projects.shot} ${name}`} className="aspect-[16/9] w-full object-cover object-top" />
+        <img src={projectImages[project.image]} alt={`${t.projects.shot} ${name}`} width="1280" height="720" fetchPriority="high" className="aspect-[16/9] w-full object-cover object-top" />
       </Reveal>
 
       <div className="mt-16 grid gap-12 lg:grid-cols-[1fr_300px]">
