@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { AnimatePresence, MotionConfig, motion } from 'motion/react'
 import { routes, useLang, useLocation } from './lib.js'
 import { LangProvider } from './components/Core.jsx'
@@ -6,6 +6,9 @@ import { Dock, Header } from './components/Chrome.jsx'
 import Home from './pages/Home.jsx'
 import Works from './pages/Works.jsx'
 import About from './pages/About.jsx'
+
+// Muestra temporal del diseño v2, fuera del layout de la v1.
+const Design = lazy(() => import('./pages/Design.jsx'))
 
 const year = new Date().getFullYear()
 
@@ -37,9 +40,12 @@ function Shell() {
 }
 
 export default function App() {
+  const { path } = useLocation()
   return (
     <MotionConfig reducedMotion="user">
-      <LangProvider><Shell /></LangProvider>
+      {path === '/diseno'
+        ? <Suspense fallback={null}><Design /></Suspense>
+        : <LangProvider><Shell /></LangProvider>}
     </MotionConfig>
   )
 }

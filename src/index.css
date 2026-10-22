@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./theme.css";
 @config "../tailwind.config.js";
 @theme {
   --color-paper: #f4f4f1;
