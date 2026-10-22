@@ -1,267 +1,295 @@
-import { createRef, useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
-import { motion, useMotionValue, useReducedMotion, useScroll, useTransform } from 'motion/react'
-import { ArrowUpRight, ExternalLink, Github, Mail, MapPin } from 'lucide-react'
-import { contact, projects } from '../content.js'
-import { projectImages, useLang, wallImages } from '../lib.js'
+import { useState } from 'react'
+import { ArrowRight, ArrowUpRight, Award, Code2, Download, FileText, GitBranch, Github, GraduationCap, LayoutDashboard, Linkedin, Mail, MapPin, Network, Scale, Server } from 'lucide-react'
+import { siDocker, siGit, siLaravel, siMysql, siNextdotjs, siOpenjdk, siPhp, siPostgresql, siReact, siSpringboot, siTypescript, siVitest } from 'simple-icons'
+import { contact, lab, projectFilters, projects, stackMain, stackMore } from '../content.js'
+import { aboutImages, external, projectImages, useLang } from '../lib.js'
 import { Rich } from '../components/Core.jsx'
-import { Burst, CodeArt, DashedArrow, Doodle, Eyes, SparkLines, SparkStar, Squiggle } from '../components/Decor.jsx'
+import { Button, Card, Reveal, Section, SectionLabel, Stat, Tag, Terminal, Timeline } from '../components/Ui.jsx'
 
-const projectHref = project => project.live || project.code || contact.github
+const skillIcons = { server: Server, tenant: Network, compliance: Scale, reports: FileText, frontend: LayoutDashboard, quality: GitBranch }
+const brandIcons = { Laravel: siLaravel, PHP: siPhp, 'Spring Boot': siSpringboot, Java: siOpenjdk, React: siReact, 'Next.js': siNextdotjs, TypeScript: siTypescript, MySQL: siMysql, PostgreSQL: siPostgresql, Docker: siDocker, Git: siGit, Vitest: siVitest }
 
-// Vuelo del mazo, en alturas de ventana de scroll:
-// 0 → RISE_END: el mazo sube y se abre en abanico.
-// FLY_START → FLY_END: cada tarjeta viaja hasta la imagen de su proyecto (con un pequeño desfase entre tarjetas).
-const RISE_END = 0.45, FLY_START = 0.5, FLY_END = 1.2, STAGGER = 0.06
-const clamp01 = v => Math.min(1, Math.max(0, v))
-const ease = v => v < 0.5 ? 4 * v * v * v : 1 - Math.pow(-2 * v + 2, 3) / 2
-const lerp = (a, b, t) => a + (b - a) * t
-
-function flight(scrollY, index) {
-  const vh = window.innerHeight
-  const start = (FLY_START + index * STAGGER) * vh
-  return { rise: clamp01(scrollY / (RISE_END * vh)), fly: clamp01((scrollY - start) / ((FLY_END - FLY_START) * vh)) }
-}
-
-function Frame({ project, className = '', style }) {
-  const image = projectImages[project.image]
-  return (
-    <motion.div style={{ backgroundColor: project.tint, ...style }} className={`rounded-2xl p-2.5 ${className}`}>
-      {image ? <img src={image} alt="" className="aspect-[16/10] w-full rounded-lg object-cover object-top" /> : <CodeArt art="terminal" className="aspect-[16/10] rounded-lg" />}
-    </motion.div>
-  )
-}
-
-// Tarjeta del mazo: fija en pantalla, interpola entre su sitio en el abanico y la imagen real de su proyecto.
-function FlyingCard({ project, index, total, target }) {
-  const x = useMotionValue(0), y = useMotionValue(0), width = useMotionValue(0), rotate = useMotionValue(0), opacity = useMotionValue(0)
-  const { scrollY } = useScroll()
-
-  useEffect(() => {
-    const update = () => {
-      const el = target.current
-      if (!el) return
-      const vw = window.innerWidth, vh = window.innerHeight
-      const { rise, fly } = flight(window.scrollY, index)
-      const offset = index - (total - 1) / 2
-      const w0 = Math.min(vw * 0.78, 470)
-      const h0 = w0 * 10 / 16 + 20
-      const a = ease(rise)
-      const fromX = vw / 2 - w0 / 2 + offset * (vw < 768 ? 22 : 115) * a
-      const fromY = lerp(vh * 1.1, vh * 0.58 - h0 / 2, a) + Math.abs(offset) * 14 * a
-      const to = el.getBoundingClientRect()
-      const f = ease(fly)
-      x.set(lerp(fromX, to.left, f))
-      y.set(lerp(fromY, to.top, f))
-      width.set(lerp(w0, to.width, f))
-      rotate.set(lerp(offset * 5 * a, 0, f))
-      opacity.set(fly >= 1 ? 0 : clamp01(rise * 5))
-    }
-    update()
-    const unsubscribe = scrollY.on('change', update)
-    const observer = new ResizeObserver(update)
-    observer.observe(document.body)
-    window.addEventListener('resize', update)
-    return () => { unsubscribe(); observer.disconnect(); window.removeEventListener('resize', update) }
-  }, [scrollY, target, index, total, x, y, width, rotate, opacity])
-
-  return <Frame project={project} style={{ x, y, width, rotate, opacity, zIndex: 30 + total - index }} className="pointer-events-none fixed left-0 top-0 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.35)]" />
-}
-
-// Portada fija: el texto se apaga mientras el mazo sube.
-function Intro() {
+function Hero() {
   const { t } = useLang()
-  const ref = useRef(null)
-  const reduce = useReducedMotion()
-  const { scrollYProgress: p } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-  const heroOpacity = useTransform(p, [0, 0.45], [1, 0.12])
-  const heroY = useTransform(p, [0, 0.6], [0, -160])
-
+  const h = t.hero
   return (
-    <div ref={ref} className={reduce ? '' : 'h-[185vh]'}>
-      <section aria-labelledby="hero-title" className={`${reduce ? 'min-h-screen' : 'sticky top-0 h-screen'} flex items-center justify-center overflow-hidden px-5`}>
-        <motion.div style={reduce ? undefined : { opacity: heroOpacity, y: heroY }} className="w-full max-w-[50rem] pb-24">
-          <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="hand mb-1 ml-1 flex items-end gap-1 text-xl sm:text-2xl"><Doodle className="mb-3 w-5 text-zinc-500" />{t.hero.hello}<Squiggle className="w-6 text-zinc-500" /></motion.p>
-          <motion.h1 id="hero-title" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1, ease: [0.2, 0.7, 0.2, 1] }} className="display text-[2.5rem] leading-[1.04] sm:text-[3.4rem] lg:text-[4.1rem]">
-            {t.hero.headline[0]}{' '}
-            <span className="inline-flex items-center gap-2 whitespace-nowrap align-baseline"><motion.span initial={{ scale: 0.6, rotate: -8, opacity: 0 }} animate={{ scale: 1, rotate: 0, opacity: 1 }} transition={{ type: 'spring', stiffness: 260, damping: 14, delay: 0.55 }} className="inline-block rounded-full bg-rust px-[0.28em] pb-[0.1em] pt-[0.02em] text-white">{t.hero.headline[1]}</motion.span><Eyes /></span>
-          </motion.h1>
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="hand mt-3 text-right text-lg sm:mr-[12%] sm:text-xl">{t.hero.side[0]}<br />{t.hero.side[1]}</motion.p>
-          <motion.a href="#proyectos" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }} className="hand mx-auto mt-14 flex w-fit flex-col items-center text-lg transition-colors hover:text-ink sm:text-xl">{t.hero.how}<DashedArrow className="mt-1 h-9 w-4" /></motion.a>
-        </motion.div>
-      </section>
-    </div>
-  )
-}
-
-function ProjectRow({ project, index, frameRef }) {
-  const { t, pick } = useLang()
-  const reduce = useReducedMotion()
-  const { scrollY } = useScroll()
-  const landed = useTransform(scrollY, v => reduce || flight(v, index).fly >= 1 ? 1 : 0)
-  const item = t.projects.items[project.key]
-  const flip = index % 2 === 1
-  const cta = project.live ? t.projects.cta[item.cta ?? 'live'] : t.projects.cta.code
-  return (
-    <a href={projectHref(project)} target="_blank" rel="noopener noreferrer" aria-label={`${cta}: ${project.name} — ${item.title} (${t.projects.newTab})`} className="group grid items-center gap-6 sm:gap-10 md:grid-cols-2">
-      <div className={`relative ${flip ? '' : 'md:order-2'}`}>
-        <div ref={frameRef}>
-          <Frame project={project} style={{ opacity: landed }} className="shadow-[0_24px_50px_-24px_rgba(0,0,0,0.35)] ring-2 ring-transparent transition-[translate,box-shadow] duration-300 group-hover:-translate-y-1 group-hover:ring-rust" />
+    <section id="sobre-mi" className="mx-auto grid max-w-6xl scroll-mt-24 grid-cols-1 items-center gap-12 px-5 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.15fr_1fr]">
+      <Reveal>
+        <div className="flex items-center gap-4">
+          {aboutImages[0] && <img src={aboutImages[0]} alt={h.photoAlt} width="56" height="56" className="size-14 rounded-xl border border-line object-cover object-top" />}
+          <SectionLabel index="01">{h.label}</SectionLabel>
         </div>
-        <SparkLines className="absolute -right-5 -top-6 w-12 scale-0 text-rust transition-transform duration-300 group-hover:scale-100" />
-        <SparkStar className="absolute -bottom-4 -left-4 w-9 scale-0 rotate-12 text-rust transition-transform delay-75 duration-300 group-hover:scale-100" />
-      </div>
-      <motion.div initial={reduce ? false : { opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }} className={`relative ${flip ? 'md:pl-4' : 'md:pr-6'}`}>
-        <span className="absolute -top-7 left-0 flex translate-y-1 items-center gap-1.5 rounded-full bg-leaf px-2.5 py-0.5 text-xs font-bold text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">{project.live ? <><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />{t.projects.live}</> : <><Github size={12} aria-hidden="true" />{t.projects.code}</>}</span>
-        <p className="hand mb-1 text-base">{project.name} · {item.org}</p>
-        <h2 className="display text-2xl leading-[1.12] tracking-[-0.035em] transition-colors duration-300 group-hover:text-rust sm:text-[1.7rem]">{item.title}</h2>
-        <p className="hand mt-2 text-lg">{project.year} <span className="mx-1 text-zinc-300">|</span> {project.tags.map(pick).join(', ')}</p>
-        <span className="mt-5 inline-flex min-h-10 items-center gap-2 rounded-full bg-ink px-4 text-sm font-medium text-white transition-colors group-hover:bg-rust">{project.live ? <>{cta}<ExternalLink size={14} aria-hidden="true" /></> : <><Github size={14} aria-hidden="true" />{cta}</>}</span>
-      </motion.div>
-    </a>
-  )
-}
-
-// Curva de la historia.
-const curvePoints = [[-30, 430], [140, 360], [300, 410], [560, 455], [880, 300], [1150, 330], [1430, 30]]
-const curvePath = (() => {
-  const p = curvePoints
-  let d = `M${p[0][0]},${p[0][1]}`
-  for (let i = 0; i < p.length - 1; i++) {
-    const p0 = p[i - 1] ?? p[i], p1 = p[i], p2 = p[i + 1], p3 = p[i + 2] ?? p2
-    d += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`
-  }
-  return d
-})()
-const storyNodes = [
-  { key: 'scalable', point: 2, label: [190, 300], line: 'M225 320 Q262 360 288 395' },
-  { key: 'ai', point: 3, label: [560, 330], arrow: 'M552 345 Q548 395 560 425 M548 412 L560 428 L572 413' },
-  { key: 'secure', point: 4, label: [880, 175], line: 'M882 195 Q878 245 880 285' },
-  { key: 'maintainable', point: 5, label: [1255, 225], line: 'M1238 245 Q1195 280 1165 312' },
-]
-
-function StoryCurve() {
-  const { t } = useLang()
-  const ref = useRef(null)
-  const reduce = useReducedMotion()
-  const [active, setActive] = useState(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 85%', 'center 55%'] })
-  const draw = useTransform(scrollYProgress, [0, 1], [0, 1])
-  const text = active ? t.story.nodes[active].text : t.story.intro
-  const choose = key => setActive(active === key ? null : key)
-
-  return (
-    <section ref={ref} aria-labelledby="story-title" className="relative py-24 sm:py-32">
-      <div className="mx-auto max-w-6xl px-5">
-        <motion.h2 id="story-title" initial={reduce ? false : { opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.6 }} transition={{ duration: 0.7 }} className="display text-[2rem] leading-[1.05] sm:ml-[12%] sm:text-5xl">{t.story.title[0]}<br />{t.story.title[1]}</motion.h2>
-      </div>
-      <div className="relative left-1/2 mt-6 w-screen -translate-x-1/2 sm:-mt-16">
-        <svg viewBox="0 0 1400 520" className="h-auto w-full overflow-visible" role="group" aria-label={t.story.title.join(' ')}>
-          <motion.path d={curvePath} fill="none" stroke="#2e2e2e" strokeWidth="22" strokeLinecap="round" style={reduce ? undefined : { pathLength: draw }} />
-          {storyNodes.map(node => {
-            const [x, y] = curvePoints[node.point]
-            const isAi = node.key === 'ai'
-            const on = active === node.key
-            return (
-              <g key={node.key} role="button" tabIndex={0} aria-pressed={on} aria-label={t.story.nodes[node.key].label} onClick={() => choose(node.key)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(node.key) } }} className="cursor-pointer outline-none [&:focus-visible_circle]:stroke-rust">
-                <motion.g initial={reduce ? false : { opacity: 0, scale: 0.4 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, amount: 0.8 }} transition={{ type: 'spring', stiffness: 260, damping: 16, delay: 0.15 * node.point }} style={{ transformOrigin: `${x}px ${y}px` }}>
-                  <circle cx={x} cy={y} r="34" fill="transparent" />
-                  <circle cx={x} cy={y} r={on || isAi ? 22 : 19} fill={isAi ? '#5ec41b' : on ? '#b2421a' : '#2e2e2e'} stroke={isAi || on ? (isAi ? '#5ec41b' : '#b2421a') : '#2e2e2e'} strokeWidth="6" className="transition-all duration-300" />
-                  <circle cx={x} cy={y} r={on || isAi ? 9 : 8} fill="#2e2e2e" />
-                  <text x={node.label[0]} y={node.label[1]} textAnchor="middle" fontFamily="Caveat, cursive" fontWeight="600" fontSize="54" fill={isAi ? '#5ec41b' : on ? '#b2421a' : '#2e2e2e'} className="transition-colors">{t.story.nodes[node.key].label}</text>
-                  {node.line && <path d={node.line} fill="none" stroke="#2e2e2e" strokeWidth="3.5" strokeLinecap="round" />}
-                  {node.arrow && <path d={node.arrow} fill="none" stroke="#5ec41b" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />}
-                  {isAi && <text x={x - 52} y={y + 78} textAnchor="middle" fontFamily="Caveat, cursive" fontSize="30" fill="#71717a">↙ {t.story.tap}</text>}
-                </motion.g>
-              </g>
-            )
-          })}
-        </svg>
-      </div>
-      <div className="mx-auto max-w-6xl px-5">
-        <p aria-live="polite" className="ml-auto mt-6 max-w-md text-base leading-7 text-zinc-500 sm:text-right sm:text-lg"><Rich parts={text} /></p>
-      </div>
+        <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-fg sm:text-6xl">{h.name}</h1>
+        <p className="mt-4 font-mono text-xs uppercase tracking-[0.18em] text-accent sm:text-sm">{h.role}</p>
+        <div className="mt-8 space-y-4 text-base leading-relaxed text-muted sm:text-lg">
+          {h.bio.map((parts, i) => <p key={i}><Rich parts={parts} /></p>)}
+        </div>
+        <div className="mt-10 flex flex-wrap gap-3">
+          <Button href="#proyectos" icon={ArrowRight}>{h.ctaProjects}</Button>
+          <Button href={contact.cv} variant="secondary" icon={Download} download>{h.ctaCv}</Button>
+        </div>
+      </Reveal>
+      <Reveal delay={0.1}><Terminal title="~/miguel" lines={h.terminal} /></Reveal>
     </section>
   )
 }
 
-// Muro de experimentos.
-const wallColumns = [
-  [{ img: 'nistrack-hero' }, { img: 'termometro-movil', tall: true }, { code: 'sql' }],
-  [{ img: 'keptai-movil', tall: true }, { text: true }, { img: 'nistrack-desafios' }],
-  [{ burst: true }, { img: 'termometro-historia' }, { code: 'terminal' }, { img: 'termometro-diagnostico' }],
-  [{ img: 'termometro-hero' }, { img: 'nistrack-movil', tall: true }, { img: 'keptai-login' }, { code: 'python' }],
-]
-
-function WallTile({ tile }) {
-  const { t } = useLang()
-  if (tile.burst) return (
-    <div className="flex aspect-square items-center justify-center rounded-xl bg-paper">
-      <motion.div initial={{ rotate: -20, scale: 0.6 }} whileInView={{ rotate: -6, scale: 1 }} viewport={{ once: true }} transition={{ type: 'spring', stiffness: 180, damping: 12 }} className="w-[92%]">
-        <Burst className="aspect-square w-full text-rust"><span className="block px-6 text-center font-hand text-[clamp(1.4rem,3.2vw,3rem)] font-semibold leading-[0.95] text-white">{t.wall.burst[0]}<br />{t.wall.burst[1]}<br />{t.wall.burst[2]}</span></Burst>
-      </motion.div>
-    </div>
-  )
-  if (tile.text) return (
-    <div className="rounded-xl bg-paper p-5 sm:p-7">
-      <svg aria-hidden="true" viewBox="0 0 30 40" className="mb-2 w-6 text-rust" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M22 3C10 10 6 22 9 36M3 30l6 7 6-6" /></svg>
-      <p className="text-sm font-semibold leading-6 text-ink lg:text-base lg:leading-7"><Rich parts={t.wall.text} /></p>
-    </div>
-  )
-  if (tile.code) return <CodeArt art={tile.code} className="aspect-[4/3] rounded-xl" />
-  return <img src={wallImages[tile.img]} alt="" loading="lazy" className={`w-full rounded-xl object-cover object-top shadow-sm ${tile.tall ? 'aspect-[3/5]' : 'aspect-[4/3]'}`} />
-}
-
-function WallColumn({ tiles, progress, speed }) {
-  const y = useTransform(progress, [0, 1], [speed, -speed])
-  return <motion.div style={{ y }} className="flex flex-col gap-2 sm:gap-3">{tiles.map((tile, i) => <WallTile key={i} tile={tile} />)}</motion.div>
-}
-
-function ExperimentWall() {
-  const { t } = useLang()
-  const ref = useRef(null)
-  const reduce = useReducedMotion()
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const speeds = reduce ? [0, 0, 0, 0] : [40, 110, 20, 80]
-  const mobile = [[...wallColumns[0], ...wallColumns[2]], [...wallColumns[1], ...wallColumns[3]]]
-  return (
-    <section ref={ref} aria-label={t.works.tabs.lab} className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden py-16">
-      <div className="hidden grid-cols-4 gap-3 px-3 md:grid">{wallColumns.map((tiles, i) => <WallColumn key={i} tiles={tiles} progress={scrollYProgress} speed={speeds[i]} />)}</div>
-      <div className="grid grid-cols-2 gap-2 px-2 md:hidden">{mobile.map((tiles, i) => <WallColumn key={i} tiles={tiles} progress={scrollYProgress} speed={reduce ? 0 : i ? 50 : 15} />)}</div>
-    </section>
-  )
-}
-
-function Closing() {
+function Stats() {
   const { t } = useLang()
   return (
-    <section aria-labelledby="closing-title" className="mx-auto max-w-3xl px-5 py-24 text-center sm:py-32">
-      <p className="hand -rotate-2 text-xl">{t.closing.note}</p>
-      <h2 id="closing-title" className="display mt-1 text-4xl leading-[1.05] sm:text-6xl">{t.closing.title}</h2>
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <a href={`mailto:${contact.email}`} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-rust px-6 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"><Mail size={16} aria-hidden="true" />{t.closing.write}</a>
-        <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center gap-2 rounded-full border border-zinc-900/15 bg-white px-6 text-sm font-medium transition-colors hover:border-zinc-900/40">LinkedIn<ArrowUpRight size={16} aria-hidden="true" /></a>
+    <div className="mx-auto max-w-6xl px-5">
+      <Reveal className="grid grid-cols-2 gap-x-6 gap-y-8 border-y border-line py-10 lg:grid-cols-4">
+        {t.stats.map(s => <Stat key={s.label} {...s} />)}
+      </Reveal>
+    </div>
+  )
+}
+
+function BrandIcon({ name }) {
+  const icon = brandIcons[name]
+  if (!icon) return null
+  return <svg viewBox="0 0 24 24" className="size-4 fill-current" aria-hidden="true"><path d={icon.path} /></svg>
+}
+
+function Skills() {
+  const { t } = useLang()
+  const s = t.skills
+  return (
+    <Section id="especialidades" index="02" label={s.label} title={s.title} subtitle={s.subtitle}>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {s.items.map(({ icon, title, text }, i) => {
+          const Icon = skillIcons[icon]
+          return (
+            <Reveal key={title} delay={(i % 3) * 0.05}>
+              <Card className="h-full">
+                <span className="grid size-10 place-items-center rounded-lg bg-accent/10 text-accent"><Icon size={20} aria-hidden="true" /></span>
+                <h3 className="mt-5 text-lg font-semibold text-fg">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">{text}</p>
+              </Card>
+            </Reveal>
+          )
+        })}
       </div>
-      <p className="hand mt-6 flex items-center justify-center gap-1.5 text-lg"><MapPin size={16} aria-hidden="true" />{t.closing.location} · {contact.email}</p>
+      <Reveal className="mt-12 grid gap-8 lg:grid-cols-[1fr_1fr]">
+        <div>
+          <h3 className="font-mono text-xs uppercase tracking-widest text-muted">{s.main}</h3>
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {stackMain.map(name => (
+              <li key={name} className="flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-2 text-sm text-fg"><span className="text-muted"><BrandIcon name={name} /></span>{name}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3 className="font-mono text-xs uppercase tracking-widest text-muted">{s.more}</h3>
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {stackMore.map(name => <li key={name}><Tag>{name}</Tag></li>)}
+          </ul>
+        </div>
+      </Reveal>
+    </Section>
+  )
+}
+
+function Experience() {
+  const { t } = useLang()
+  const e = t.experience
+  return (
+    <Section id="experiencia" index="03" label={e.label} title={e.title}>
+      <Reveal>
+        <Timeline items={e.jobs.map(job => ({
+          ...job,
+          children: <>
+            <p className="max-w-3xl text-muted"><Rich parts={job.intro} /></p>
+            <ul className="mt-5 max-w-3xl space-y-3 text-sm leading-relaxed text-muted sm:text-base">
+              {job.points.map(p => (
+                <li key={p.b} className="relative pl-5 before:absolute before:left-0 before:top-[0.6em] before:size-1.5 before:rounded-full before:bg-accent/70">
+                  <b className="font-semibold text-fg">{p.b}:</b> {p.t}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 flex flex-wrap gap-2">{job.tags.map(tag => <Tag key={tag}>{tag}</Tag>)}</div>
+          </>,
+        }))} />
+      </Reveal>
+      <Reveal className="mt-14 max-w-3xl">
+        <h3 className="font-mono text-xs uppercase tracking-widest text-muted">{e.otherTitle}</h3>
+        <div className="mt-4 rounded-xl border border-line bg-surface/60 p-5">
+          <p className="font-semibold text-fg">{e.other.role} <span className="text-muted">·</span> {e.other.org}</p>
+          <p className="mt-1 font-mono text-xs text-muted">{e.other.period} · {e.other.place}</p>
+          <p className="mt-3 text-sm leading-relaxed text-muted">{e.other.text}</p>
+        </div>
+      </Reveal>
+    </Section>
+  )
+}
+
+function ProjectCard({ project, index }) {
+  const { t, pick } = useLang()
+  const p = t.projects
+  const item = p.items[project.key]
+  const name = pick(project.name)
+  return (
+    <article className="group grid overflow-hidden rounded-2xl border border-line bg-surface transition hover:border-accent/40 lg:grid-cols-2">
+      <div className={`overflow-hidden border-b border-line bg-surface-2 lg:border-b-0 ${index % 2 ? 'lg:order-2 lg:border-l' : 'lg:border-r'}`}>
+        <img src={projectImages[project.image]} alt={`${p.shot} ${name}`} loading="lazy" className="aspect-[16/10] h-full w-full object-cover object-top transition duration-500 group-hover:scale-[1.02]" />
+      </div>
+      <div className="flex flex-col p-6 sm:p-8">
+        <p className="font-mono text-xs text-muted">{item.org} · {project.year}</p>
+        <h3 className="mt-2 text-2xl font-bold text-fg">{name}</h3>
+        <p className="mt-3 leading-relaxed text-muted">{item.summary}</p>
+        <div className="mt-5 flex flex-wrap gap-2">{project.tags.map(tag => <Tag key={tag}>{pick(tag)}</Tag>)}</div>
+        <div className="mt-auto flex flex-wrap gap-3 pt-8">
+          {project.live && <Button href={project.live} icon={ArrowUpRight} {...external(project.live)} aria-label={`${p.cta[item.liveCta ?? 'live']}: ${name} (${p.newTab})`}>{p.cta[item.liveCta ?? 'live']}</Button>}
+          {project.code && <Button href={project.code} variant="secondary" icon={Github} {...external(project.code)} aria-label={`${p.cta.code}: ${name} (${p.newTab})`}>{p.cta.code}</Button>}
+        </div>
+      </div>
+    </article>
+  )
+}
+
+function Projects() {
+  const { t } = useLang()
+  const p = t.projects
+  const [filter, setFilter] = useState('all')
+  const shown = filter === 'all' ? projects : projects.filter(project => project.filters.includes(filter))
+  return (
+    <Section id="proyectos" index="04" label={p.label} title={p.title} subtitle={p.subtitle}>
+      <div role="group" aria-label={p.filtersLabel} className="-mt-4 mb-8 flex flex-wrap gap-2">
+        {projectFilters.map(key => (
+          <button key={key} type="button" aria-pressed={filter === key} onClick={() => setFilter(key)}
+            className={`rounded-full border px-4 py-1.5 text-sm transition ${filter === key ? 'border-accent bg-accent/10 text-accent' : 'border-line text-muted hover:text-fg'}`}>
+            {p.filters[key]}
+          </button>
+        ))}
+      </div>
+      <div className="space-y-6">
+        {shown.map((project, i) => <Reveal key={project.key}><ProjectCard project={project} index={i} /></Reveal>)}
+      </div>
+    </Section>
+  )
+}
+
+function Lab() {
+  const { t, pick } = useLang()
+  const l = t.lab
+  return (
+    <Section id="laboratorio" index="05" label={l.label} title={l.title} subtitle={l.subtitle}>
+      <div className="grid gap-4 md:grid-cols-3">
+        {lab.map((item, i) => {
+          const text = l.items[item.key]
+          return (
+            <Reveal key={item.key} delay={i * 0.05}>
+              <Card className="flex h-full flex-col p-0">
+                <pre className="overflow-x-auto rounded-t-xl border-b border-line bg-surface-2 p-4 font-mono text-xs leading-relaxed text-muted">{item.code.join('\n')}</pre>
+                <div className="flex flex-1 flex-col p-6">
+                  <p className="font-mono text-xs text-accent">{text.area}</p>
+                  <h3 className="mt-2 text-lg font-semibold text-fg">{text.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{text.text}</p>
+                  <div className="mt-auto flex flex-wrap gap-2 pt-5">{item.tags.map(tag => <Tag key={tag}>{pick(tag)}</Tag>)}</div>
+                </div>
+              </Card>
+            </Reveal>
+          )
+        })}
+      </div>
+    </Section>
+  )
+}
+
+function Education() {
+  const { t } = useLang()
+  const e = t.education
+  return (
+    <Section id="formacion" index="06" label={e.label} title={e.title}>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Reveal>
+          <Card className="h-full">
+            <span className="grid size-10 place-items-center rounded-lg bg-accent/10 text-accent"><GraduationCap size={20} aria-hidden="true" /></span>
+            <h3 className="mt-5 text-xl font-semibold text-fg">{e.degree.title}</h3>
+            <p className="mt-1 text-accent">{e.degree.school}</p>
+            <p className="mt-1 font-mono text-xs text-muted">{e.degree.place} · {e.degree.period}</p>
+            <ul className="mt-5 space-y-2 text-sm text-muted">
+              {e.degree.points.map(point => <li key={point} className="relative pl-5 before:absolute before:left-0 before:top-[0.55em] before:size-1.5 before:rounded-full before:bg-accent/70">{point}</li>)}
+            </ul>
+          </Card>
+        </Reveal>
+        <Reveal delay={0.05}>
+          <h3 className="font-mono text-xs uppercase tracking-widest text-muted">{e.certsTitle}</h3>
+          <div className="mt-4 flex items-start gap-3 rounded-xl border border-accent/50 bg-accent/5 p-4">
+            <Award size={20} className="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
+            <div><p className="font-semibold text-fg">{e.highlight.title}</p><p className="text-sm text-muted">{e.highlight.org} · 2026</p></div>
+          </div>
+          <div className="mt-4 space-y-4">
+            {e.groups.map(group => (
+              <div key={group.title} className="rounded-xl border border-line bg-surface p-4">
+                <p className="text-sm font-semibold text-fg">{group.title} <span className="font-mono text-xs font-normal text-muted">· {group.org} · {group.year}</span></p>
+                <ul className="mt-2 flex flex-wrap gap-2">{group.items.map(item => <li key={item}><Tag>{item}</Tag></li>)}</ul>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </div>
+    </Section>
+  )
+}
+
+function Contact() {
+  const { t } = useLang()
+  const c = t.contact
+  const details = [
+    { key: 'email', icon: Mail, label: contact.email, href: `mailto:${contact.email}` },
+    { key: 'linkedin', icon: Linkedin, label: 'linkedin.com/in/miguel-yamunaque-villegas', href: contact.linkedin },
+    { key: 'github', icon: Github, label: 'github.com/sircodexx', href: contact.github },
+    { key: 'location', icon: MapPin, label: c.location },
+  ]
+  return (
+    <section id="contacto" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 sm:py-28">
+      <Reveal className="grid gap-12 rounded-2xl border border-line bg-surface p-6 sm:p-10 lg:grid-cols-[1.1fr_1fr]">
+        <div>
+          <SectionLabel index="07">{c.label}</SectionLabel>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-fg sm:text-4xl">{c.title}</h2>
+          <p className="mt-4 leading-relaxed text-muted sm:text-lg">{c.text}</p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button href={`mailto:${contact.email}`} icon={Mail}>{c.write}</Button>
+            <Button href={contact.cv} variant="secondary" icon={Download} download>{c.links.cv}</Button>
+          </div>
+          <h3 className="mt-10 font-mono text-xs uppercase tracking-widest text-muted">{c.infoTitle}</h3>
+          <ul className="mt-4 space-y-3 text-sm">
+            {details.map(({ key, icon: Icon, label, href }) => (
+              <li key={key} className="flex items-center gap-3 text-muted">
+                <Icon size={16} className="shrink-0 text-accent" aria-hidden="true" />
+                {href ? <a href={href} {...external(href)} className="break-all transition hover:text-fg">{label}</a> : <span>{label}</span>}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3 className="font-mono text-xs uppercase tracking-widest text-muted">{c.offerTitle}</h3>
+          <ul className="mt-4 space-y-3">
+            {c.offers.map(offer => (
+              <li key={offer.title} className="rounded-xl border border-line bg-bg/50 p-5">
+                <p className="flex items-center gap-2 font-semibold text-fg"><Code2 size={16} className="text-accent" aria-hidden="true" />{offer.title}</p>
+                <p className="mt-2 text-sm leading-relaxed text-muted">{offer.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Reveal>
     </section>
   )
 }
 
 export default function Home() {
-  const { t } = useLang()
-  const reduce = useReducedMotion()
-  const [frameRefs] = useState(() => projects.map(() => createRef()))
   return (
     <>
-      <Intro />
-      {!reduce && createPortal(<div aria-hidden="true">{projects.map((project, i) => <FlyingCard key={project.key} project={project} index={i} total={projects.length} target={frameRefs[i]} />)}</div>, document.body)}
-      <section id="proyectos" aria-label={t.dock.works} className={`relative z-10 mx-auto max-w-5xl space-y-24 px-5 pb-10 pt-4 sm:space-y-32 ${reduce ? '' : 'md:-mt-[30vh]'}`}>
-        {projects.map((project, i) => <ProjectRow key={project.key} project={project} index={i} frameRef={frameRefs[i]} />)}
-        <p className="hand text-center text-xl">{t.projects.more}</p>
-      </section>
-      <StoryCurve />
-      <ExperimentWall />
-      <Closing />
+      <Hero />
+      <Stats />
+      <Skills />
+      <Experience />
+      <Projects />
+      <Lab />
+      <Education />
+      <Contact />
     </>
   )
 }

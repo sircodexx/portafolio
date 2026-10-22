@@ -1,230 +1,301 @@
-// Textos y datos del portafolio. Los textos con "es|en" se separan por idioma.
-export const contact = { github: 'https://github.com/sircodexx', linkedin: 'https://www.linkedin.com/in/miguel-yamunaque-villegas', email: 'myamunaquevillegas@gmail.com', cv: '/cv/Miguel-Yamunaque-CV.pdf' }
+// Textos y datos del portafolio v2. Lo que no depende del idioma va arriba; los textos, en `content.es` y `content.en`.
+// Los textos enriquecidos son listas de tramos: { t } texto normal, { b } texto destacado.
 
-// Habilidades, tal como aparecen en el CV.
-export const skills = [
-  { key: 'languages', items: ['TypeScript', 'JavaScript', 'PHP', 'Java', 'Python'] },
-  { key: 'backend', items: ['Laravel', 'Spring Boot', 'Node.js', 'FastAPI'] },
-  { key: 'frontend', items: ['Next.js', 'React', 'Astro', 'Angular', 'Vue', 'Tailwind CSS', 'GSAP'] },
-  { key: 'data', items: ['MySQL', 'PostgreSQL', 'SQL Server'] },
-  { key: 'mobile', items: ['React Native'] },
-  { key: 'cloud', items: ['Docker', 'Kubernetes', 'Jenkins', 'CI/CD', 'Azure', 'AWS', 'Google Cloud', 'Git', 'GitHub'] },
-  { key: 'testing', items: ['Test Automation', 'Unit Testing', 'Integration Testing', 'Postman'] },
-  { key: 'architecture', items: ['Microservicios|Microservices', 'APIs RESTful|RESTful APIs', 'Multi-tenant', 'Programación funcional|Functional programming', 'Programación reactiva|Reactive programming', 'SSR', 'NIST Framework'] },
-]
+export const contact = {
+  email: 'myamunaquevillegas@gmail.com',
+  linkedin: 'https://www.linkedin.com/in/miguel-yamunaque-villegas',
+  github: 'https://github.com/sircodexx',
+  cv: '/cv/Miguel-Yamunaque-CV.pdf',
+}
 
-// Proyectos. `image`: archivo en src/assets/projects/. `live`: producción. `code`: repositorio (vacío = perfil de GitHub).
+// Stack visible en la web: el núcleo se respalda con proyectos; el resto va como "también he trabajado con".
+export const stackMain = ['Laravel', 'PHP', 'Spring Boot', 'Java', 'React', 'Next.js', 'TypeScript', 'MySQL', 'PostgreSQL', 'Docker', 'Git', 'PHPUnit', 'Vitest']
+export const stackMore = ['Python', 'FastAPI', 'Node.js', 'Supabase', 'Tailwind CSS', 'shadcn/ui', 'Angular', 'Vue', 'React Native', 'SQL Server', 'Postman', 'n8n', 'Linux']
+
+// Proyectos. Los textos con "es|en" se separan por idioma. `image`: archivo en src/assets/projects/. `filters`: live (en producción), code (código abierto), ai (usa IA).
 export const projects = [
-  { key: 'nistrack', name: 'Nistrack', image: 'nistrack', year: '2026', tags: ['Next.js', 'TypeScript', 'Tailwind', 'SSR'], live: 'https://www.nistrack.com/', tabs: ['live'], tint: '#e9e4dc' },
-  { key: 'termometro', name: 'Termómetro de Resiliencia', image: 'termometro', year: '2026', tags: ['React', 'Multi-tenant', 'UI/UX'], live: 'https://term-metro-de-resiliencia-operativa.vercel.app/', tabs: ['live'], tint: '#e3ddd5' },
-  { key: 'keptai', name: 'KeptAI', image: 'keptai', year: '2026', tags: ['Supabase', 'IA|AI', 'Backend'], live: 'https://keptai.ejesxyz.com/login', tabs: ['live', 'ai'], tint: '#dde3ea' },
-  { key: 'agrimonitor', name: 'AgriMonitor', image: 'agrimonitor', year: '2026', tags: ['Spring Boot', 'PostgreSQL', 'Docker', 'Ubuntu VPS'], code: 'https://github.com/sircodexx/AgriMonitor', tabs: ['code'], tint: '#dfe6d8' },
+  { key: 'nistrack', name: 'NISTRACK', image: 'nistrack', year: '2026', tags: ['Laravel', 'React', 'TypeScript', 'MySQL'], live: 'https://www.nistrack.com/', filters: ['live'] },
+  { key: 'termometro', name: 'Termómetro de Resiliencia|Resilience Thermometer', image: 'termometro', year: '2026', tags: ['Laravel', 'Next.js', 'TypeScript', 'PDF'], live: 'https://term-metro-de-resiliencia-operativa.vercel.app/', filters: ['live'] },
+  { key: 'keptai', name: 'KeptAI', image: 'keptai', year: '2026', tags: ['Supabase', 'PostgreSQL', 'IA|AI'], live: 'https://keptai.ejesxyz.com/login', filters: ['live', 'ai'] },
+  { key: 'agrimonitor', name: 'AgriMonitor', image: 'agrimonitor', year: '2026', tags: ['Java', 'Spring Boot', 'PostgreSQL', 'Docker'], code: 'https://github.com/sircodexx/AgriMonitor', filters: ['live', 'code', 'ai'] },
+]
+export const projectFilters = ['all', 'live', 'code', 'ai']
+
+// Laboratorio: `code` es el fragmento que ilustra cada experimento.
+export const lab = [
+  { key: 'vps', tags: ['Linux', 'VPS', 'Docker'], code: ['$ docker compose up -d', '✔ api       started', '✔ postgres  healthy'] },
+  { key: 'tenant', tags: ['Laravel', 'Multi-tenant'], code: ['Gate::policy(Asset::class,', '  AssetPolicy::class);', '// tenant_id = auth()->tenant'] },
+  { key: 'ai', tags: ['Python', 'IA|AI', 'Scraping'], code: ['soup = BeautifulSoup(html)', 'rows = soup.select("tr")', 'summary = llm(rows)'] },
 ]
 
-// Experimentos del laboratorio (sin captura: se dibujan como código).
-export const labItems = [
-  { key: 'vps', art: 'terminal', tags: ['Linux', 'VPS', 'Docker'], tabs: ['lab'] },
-  { key: 'tenant', art: 'sql', tags: ['Laravel', 'Multi-tenant'], tabs: ['lab'] },
-  { key: 'ai', art: 'python', tags: ['Python', 'IA|AI', 'Scraping'], tabs: ['lab', 'ai'] },
+const terminalStack = [
+  { key: 'backend', value: 'Laravel · PHP · Spring Boot · Java' },
+  { key: 'frontend', value: 'React · Next.js · TypeScript' },
+  { key: 'data', value: 'MySQL · PostgreSQL' },
+  { key: 'quality', value: 'PHPUnit · Vitest · PHPStan' },
+  { key: 'infra', value: 'Docker · Linux VPS · Git' },
 ]
-
-export const tabs = ['live', 'code', 'lab', 'ai']
 
 export const content = {
   es: {
-    meta: { title: 'Miguel Yamunaqué | Desarrollador Web Jr. Backend & Full-Stack', description: 'Portafolio de Miguel Yamunaqué Villegas, Desarrollador Web Jr. Backend & Full-Stack en Piura, Perú.' },
+    meta: {
+      title: 'Miguel Yamunaqué · Desarrollador Full-Stack Jr.',
+      description: 'Desarrollador Full-Stack Jr. en Piura, Perú. Construyo plataformas SaaS B2B con Laravel, React y Spring Boot: arquitectura multi-tenant, APIs REST, pruebas automatizadas y despliegue con Docker.',
+    },
     skip: 'Saltar al contenido',
     langButton: 'Switch to English',
-    tagline: 'backend & full-stack',
-    nav: { main: 'Navegación principal', social: 'Redes y contacto' },
-    dock: { works: 'proyectos', about: 'sobre mí', links: 'links', allWorks: 'Todos los proyectos' },
-    links: { linkedin: 'LinkedIn', email: 'Email', github: 'GitHub', cv: 'CV' },
+    menu: { open: 'Abrir menú', close: 'Cerrar menú' },
+    nav: { label: 'Navegación principal', about: 'Sobre mí', skills: 'Especialidades', experience: 'Experiencia', projects: 'Proyectos', education: 'Formación', contact: 'Contacto' },
+
     hero: {
-      hello: 'Hola, soy Miguel',
-      headline: ['Construyo backends robustos e interfaces que simplemente…', 'funcionan'],
-      side: ['construyo productos end-to-end,', 'de la base de datos al deploy.'],
-      how: 'Okay… ¿y cómo lo hago?',
-    },
-    projects: {
-      more: 'y más en camino',
-      live: 'en vivo', code: 'ver código', newTab: 'abre en una pestaña nueva',
-      cta: { live: 'Ver Proyecto', tool: 'Ver Herramienta', code: 'Ver Código' },
-      items: {
-        nistrack: { title: 'Arquitectura y desarrollo front-end de una plataforma SaaS para la gestión de ciberseguridad (NIST) y resiliencia.', org: 'Cloud Technologies', desc: 'Plataforma GRC con evaluación de madurez NIST CSF 2.0 y renderizado del lado del servidor.' },
-        termometro: { title: 'Desarrollé una herramienta de evaluación interactiva end-to-end para medir la resiliencia empresarial.', org: 'Cloud Technologies', desc: 'Diagnóstico de 20 preguntas con reporte PDF, basado en NIST SP 800-34.', cta: 'tool' },
-        keptai: { title: 'Diseñé una arquitectura backend con IA en 48 horas para automatizar pedidos y cotizaciones.', org: 'Hackathon Piura Innova · GDG Piura', desc: 'Esquema relacional en PostgreSQL y flujos asistidos por IA, de cero a demo en 48 horas.' },
-        agrimonitor: { title: 'Desplegué una arquitectura IoT en tiempo real para el monitoreo de métricas agrícolas.', org: 'Proyecto personal', desc: 'API en Spring Boot y PostgreSQL, contenerizada con Docker en un VPS Ubuntu.' },
-      },
-    },
-    story: {
-      title: ['Paso mucho tiempo', 'pensando en la arquitectura'],
-      tap: 'tócame',
-      intro: [{ t: 'Me enfoco en construir sistemas… ' }, { b: 'escalables' }, { t: ' que soporten el crecimiento, ' }, { b: 'seguros' }, { t: ' que protejan la información crítica y ' }, { b: 'mantenibles' }, { t: ' para que el equipo itere rápido.' }],
-      nodes: {
-        scalable: { label: 'Escalable', text: [{ b: 'Escalable:' }, { t: ' servicios y datos pensados para crecer con el negocio, sin reescribir todo.' }] },
-        ai: { label: 'IA', text: [{ b: 'IA:' }, { t: ' integro flujos asistidos por IA para prototipar, automatizar y decidir más rápido.' }] },
-        secure: { label: 'Seguro', text: [{ b: 'Seguro:' }, { t: ' aislamiento multi-tenant y políticas de acceso para proteger la información crítica.' }] },
-        maintainable: { label: 'Mantenible', text: [{ b: 'Mantenible:' }, { t: ' código claro y despliegues en contenedores para que el equipo itere sin miedo.' }] },
-      },
-    },
-    wall: {
-      burst: ['~ Yo ~', 'Experimento', 'MUCHO'],
-      text: [{ h: 'Me gusta probar ideas temprano' }, { t: ': monto VPS en Linux con Docker, pruebo aislamiento multi-tenant en Laravel y conecto flujos de IA y scraping con Python. Experimentar me ayuda a aprender rápido, bajar el riesgo y ' }, { h: 'encontrar la versión que de verdad funciona.' }],
-    },
-    closing: { note: '¿hablamos?', title: '¿Construimos algo juntos?', write: 'Escríbeme', location: 'Piura, Perú' },
-    works: {
-      title: 'Todos los proyectos',
-      subtitle: 'Productos en producción, código, laboratorio e IA.',
-      tabs: { live: 'En producción', code: 'Código', lab: 'Laboratorio', ai: 'IA' },
-      tabNotes: { live: 'Productos desplegados que hoy usan personas reales.', code: 'Proyectos personales con el código abierto en GitHub.', lab: 'Pruebas técnicas y experimentos autodidactas.', ai: 'Donde la inteligencia artificial hace parte del trabajo.' },
-      lab: {
-        vps: { title: 'Entornos VPS en Linux con Docker', org: 'Laboratorio · DevOps', desc: 'Configuración de servidores Linux y despliegue de contenedores con Docker.' },
-        tenant: { title: 'Aislamiento multi-tenant en Laravel', org: 'Laboratorio · Seguridad', desc: 'Pruebas de aislamiento de datos y políticas de acceso por inquilino.' },
-        ai: { title: 'Flujos de IA y web scraping', org: 'Laboratorio · Python', desc: 'Integración de flujos de IA y extracción de datos web con Python.' },
-      },
-    },
-    about: {
-      note: 'sobre mí',
-      title: 'Un poco más sobre mí',
-      intro: [{ t: 'Estudiante de Ingeniería de Sistemas e Informática (10.º ciclo) y desarrollador que disfruta construir ' }, { h: 'de punta a punta' }, { t: ': del diseño de la base de datos y la seguridad del servidor a la experiencia en la interfaz.' }],
-      caption: 'ese soy yo',
-      photoHint: 'foto pronto',
-      items: [
-        { icon: 'burst', title: 'Hoy en Cloud Technologies', text: 'Módulos de resiliencia operativa y GRC con Laravel y MySQL en arquitectura multi-tenant, SPAs con Next.js y React, y despliegues con Docker.' },
-        { icon: 'spark', title: 'Lo que hago con IA', text: 'Flujos de desarrollo asistidos por IA y orquestación de motores de evaluación normativa. En 48 horas armé el backend con IA de KeptAI.' },
-        { icon: 'trophy', title: 'Logros y certificaciones', text: 'Hackathon Regional Piura Innova 2026 (GDG Piura), certificaciones de ciberseguridad de Cisco y Asistente de Docencia en Algorítmica (UTP).' },
+      label: 'sobre mí',
+      name: 'Miguel Yamunaqué Villegas',
+      role: 'Desarrollador Full-Stack Jr. · Backend y plataformas SaaS',
+      photoAlt: 'Foto de Miguel Yamunaqué',
+      bio: [
+        [{ t: 'Soy desarrollador full-stack y estudiante de último año de Ingeniería de Sistemas e Informática. Trabajo en ' }, { b: 'Cloud Technologies' }, { t: ', donde desarrollo ' }, { b: 'NISTRACK' }, { t: ', una plataforma SaaS multi-tenant de gobierno, riesgo y cumplimiento (GRC) que mide la postura de ciberseguridad de las empresas frente a ' }, { b: 'NIST CSF 2.0 e ISO/IEC 27001' }, { t: '.' }],
+        [{ t: 'Mi fuerte es el backend: ' }, { b: 'APIs RESTful en Laravel' }, { t: ' con aislamiento estricto de datos entre empresas, motores de evaluación que convierten normas en lógica de negocio y ' }, { b: 'reportes PDF de auditoría' }, { t: ' generados en el servidor. En el front-end trabajo con ' }, { b: 'React, Next.js y TypeScript' }, { t: '.' }],
+        [{ t: 'Trabajo con disciplina de equipo: ' }, { b: 'pruebas automatizadas' }, { t: ' (PHPUnit y Vitest), análisis estático con PHPStan, ramas feature → develop → main y pull requests revisados. Uso la IA como herramienta para acelerar el desarrollo, sin delegarle el criterio ni la calidad del código.' }],
       ],
-      skillsTitle: 'Mi stack',
-      groups: { languages: 'Lenguajes', backend: 'Backend', frontend: 'Frontend', data: 'Bases de datos', mobile: 'Mobile', cloud: 'Cloud y DevOps', testing: 'Testing y QA', architecture: 'Arquitectura y paradigmas' },
-      experienceTitle: 'Experiencia',
+      ctaProjects: 'Ver proyectos',
+      ctaCv: 'Descargar CV',
+      terminal: [{ cmd: 'whoami' }, { out: 'miguel-yamunaque · full-stack developer jr.' }, { cmd: 'cat stack.txt' }, ...terminalStack, { cmd: 'pwd' }, { out: '/piura/peru' }],
+    },
+
+    stats: [
+      { value: '2', label: 'productos en producción en Cloud Technologies' },
+      { value: '7', label: 'tipos de reportes PDF de auditoría en NISTRACK' },
+      { value: '48 h', label: 'de cero a demo con KeptAI (Hackathon GDG Piura)' },
+      { value: '9', label: 'certificados (Cisco, UTP, GDG)' },
+    ],
+
+    skills: {
+      label: 'especialidades',
+      title: 'Especialidades técnicas',
+      subtitle: 'Lo que sé hacer y puedo demostrar con proyectos reales.',
+      items: [
+        { icon: 'server', title: 'Backend y APIs REST', text: 'APIs en Laravel y Spring Boot con controladores RESTful, validación, autenticación con Sanctum o JWT y guardado inmediato para no perder datos.' },
+        { icon: 'tenant', title: 'Multi-tenant y seguridad', text: 'Aislamiento de datos por empresa con scopes y Policies, permisos por módulo, roles y 2FA.' },
+        { icon: 'compliance', title: 'Cumplimiento normativo', text: 'Motores de evaluación y madurez sobre NIST CSF 2.0, NIST SP 800-34 e ISO/IEC 27001, con matrices de riesgo y trazabilidad.' },
+        { icon: 'reports', title: 'Reportes y datos', text: 'Reportes PDF generados en el servidor con gráficos (Chart.js / QuickChart) y modelado relacional en MySQL y PostgreSQL.' },
+        { icon: 'frontend', title: 'Front-end', text: 'SPAs en React, Next.js y TypeScript con Tailwind y shadcn/ui; componentes con búsqueda asíncrona y estado persistente entre sesiones.' },
+        { icon: 'quality', title: 'Calidad y despliegue', text: 'PHPUnit, Vitest y PHPStan; Git flow con pull requests; Docker, VPS Linux y CI con GitHub Actions.' },
+      ],
+      main: 'Stack principal',
+      more: 'También he trabajado con',
+    },
+
+    experience: {
+      label: 'experiencia',
+      title: 'Experiencia profesional',
       current: 'actual',
       jobs: [
-        { role: 'Desarrollador Full-Stack', company: 'Cloud Technologies E.I.R.L.', place: 'Piura, Perú', period: 'Mar 2026 — Actualidad', current: true, points: [
-          [{ b: 'Backend y aislamiento multi-tenant:' }, { t: ' diseñé y orquesté el módulo de resiliencia operativa GRC con Laravel y MySQL, con aislamiento estricto de datos entre organizaciones mediante Laravel Policies.' }],
-          [{ b: 'Front-end y SSR:' }, { t: ' construí una SPA end-to-end con Next.js, TypeScript y Tailwind v4, con persistencia de estado resiliente para evaluaciones multisesión y solución de hydration mismatches.' }],
-          [{ b: 'Ciberseguridad NIST:' }, { t: ' implementé un motor de evaluación basado en NIST SP 800-34 y 800-30, con endpoints RESTful de guardado inmediato e integración de alertas tempranas oficiales (SENAMHI, ENFEN).' }],
-          [{ b: 'Reportes y IA:' }, { t: ' orquesté la exportación de reportes de auditoría en PDF generados en el servidor y dirigí la arquitectura bajo un flujo de desarrollo asistido por IA.' }],
-        ] },
-        { role: 'Auxiliar de Atención al Cliente', company: 'Promart Homecenter', place: 'Piura, Perú', period: 'Ago 2023 — Sep 2026', points: [
-          [{ b: 'Atención al público:' }, { t: ' gestión directa de consultas y orientación al cliente, asegurando una experiencia de compra fluida y positiva.' }],
-          [{ b: 'Desarrollo de soft skills:' }, { t: ' fortalecimiento de habilidades interpersonales clave como comunicación efectiva, trabajo en equipo, empatía y resolución ágil de inconvenientes diarios en un entorno comercial de alta demanda.' }],
-        ] },
+        {
+          role: 'Desarrollador Full-Stack', org: 'Cloud Technologies E.I.R.L.', place: 'Piura, Perú', period: 'mar. 2026 — actualidad', current: true,
+          intro: [{ t: 'Empresa peruana de ciberseguridad. Desarrollo ' }, { b: 'NISTRACK' }, { t: ', plataforma SaaS GRC multi-tenant, y su módulo público ' }, { b: 'Termómetro de Resiliencia' }, { t: '.' }],
+          points: [
+            { b: 'Evaluación de cumplimiento', t: 'desarrollé la lógica que evalúa NIST CSF 2.0 y la cruza con el Anexo A de ISO/IEC 27001:2022, calculando el nivel de madurez (0 a 4) y la brecha frente al nivel óptimo.' },
+            { b: 'Catálogo de activos v2', t: 'separé la taxonomía cerrada de activos del catálogo comercial global de marcas y modelos, con una cola de moderación que fusiona duplicados y un asistente de valoración de criticidad (confidencialidad, integridad y disponibilidad).' },
+            { b: 'Riesgos', t: 'matriz que cruza activos, amenazas y vulnerabilidades y calcula el nivel de riesgo por probabilidad e impacto.' },
+            { b: 'Motor de reportes PDF', t: '7 reportes de auditoría (completo, radar de progreso, resumen NIST, activos, riesgos, cumplimiento ISO 27001 y Declaración de Aplicabilidad), con gráficos convertidos en imágenes desde el servidor.' },
+            { b: 'Aislamiento multi-tenant y seguridad', t: 'filtros por empresa en todos los módulos y participación en la auditoría y remediación de seguridad del aislamiento entre clientes, con tests primero y un commit por corrección.' },
+            { b: 'Termómetro de Resiliencia', t: 'API en Laravel con guardado inmediato por respuesta (retomable en varias sesiones), aislamiento con Policies y roles, y front-end en Next.js / TanStack Start con TypeScript.' },
+          ],
+          tags: ['Laravel', 'PHP', 'MySQL', 'React', 'TypeScript', 'Next.js', 'PHPUnit', 'Vitest', 'PHPStan'],
+        },
       ],
-      educationTitle: 'Educación',
-      education: { degree: 'Ingeniería de Sistemas e Informática', school: 'Universidad Tecnológica del Perú', place: 'Piura, Perú', period: 'Mar 2022 — Actualidad', points: ['Tercio superior', 'Miembro activo del grupo de programación competitiva'] },
-      certsTitle: 'Certificados',
-      certs: [
-        { title: 'Hackathon Regional de Innovación Piura Innova 2026', org: 'Google Developer Group Piura', year: '2026', highlight: true },
-        { title: 'Introduction to Cybersecurity', org: 'Cisco', year: '2025' },
-        { title: 'Gestión de amenazas cibernéticas', org: 'Cisco', year: '2025' },
-        { title: 'Defensa de la red', org: 'Cisco', year: '2025' },
-        { title: 'Seguridad de terminales', org: 'Cisco', year: '2025' },
-        { title: 'Domina Python y conquista el mundo de los datos', org: 'UTP', year: '2025' },
-        { title: 'Crea apps web como un pro: Node.js y Angular', org: 'UTP', year: '2025' },
-        { title: 'Asistente de Docencia en Algorítmica', org: 'UTP', year: '2024' },
-        { title: 'Inglés A2 (MCER)', org: 'UTP', year: '2024' },
-      ],
-      cv: { note: 'todo en una hoja', title: 'Mi CV', text: 'Experiencia, educación, habilidades y certificados en PDF.', open: 'Ver CV', download: 'Descargar PDF' },
-      dragHint: 'arrástrame',
+      otherTitle: 'Otra experiencia',
+      other: { role: 'Auxiliar de Atención al Cliente', org: 'Promart Homecenter', place: 'Piura', period: 'ago. 2023 — sep. 2026', text: 'Atención directa y resolución de incidencias bajo presión en un entorno comercial de alta demanda, con trabajo orientado a metas y métricas de calidad de servicio.' },
     },
-    footer: 'Hecho con React, Tailwind CSS y Motion.',
+
+    projects: {
+      label: 'proyectos',
+      title: 'Proyectos destacados',
+      subtitle: 'Productos en producción y proyectos con código abierto. Cada uno tiene su caso técnico.',
+      filters: { all: 'Todos', live: 'En producción', code: 'Código', ai: 'IA' },
+      filtersLabel: 'Filtrar proyectos',
+      cta: { case: 'Ver caso', live: 'Ver en vivo', tool: 'Ver herramienta', code: 'Código' },
+      newTab: 'abre en una pestaña nueva',
+      shot: 'Captura de',
+      items: {
+        nistrack: { org: 'Cloud Technologies', summary: 'Plataforma SaaS multi-tenant que mide la postura de ciberseguridad de las empresas frente a NIST CSF 2.0 e ISO 27001.' },
+        termometro: { org: 'Cloud Technologies', summary: 'Diagnóstico de 20 preguntas que mide qué tan preparada está una empresa para el Fenómeno El Niño.', liveCta: 'tool' },
+        keptai: { org: 'Hackathon Piura Innova · GDG Piura', summary: 'Backend con IA para automatizar pedidos y cotizaciones, de cero a demo en 48 horas con un equipo de 4.' },
+        agrimonitor: { org: 'Proyecto personal', summary: 'API IoT en producción que combina sensores ESP32 y visión por computadora para detectar antracnosis en cultivos de palta.' },
+      },
+    },
+
+    lab: {
+      label: 'laboratorio',
+      title: 'Laboratorio',
+      subtitle: 'Experimentos para aprender rápido y bajar el riesgo antes de usar algo en producción.',
+      items: {
+        vps: { area: 'DevOps', title: 'Servidores Linux con Docker', text: 'Configuración de VPS Linux y despliegue de servicios en contenedores con Docker Compose.' },
+        tenant: { area: 'Seguridad', title: 'Aislamiento multi-tenant en Laravel', text: 'Pruebas de aislamiento de datos y políticas de acceso por inquilino.' },
+        ai: { area: 'Python', title: 'Flujos de IA y web scraping', text: 'Extracción de datos web e integración de modelos de IA con Python.' },
+      },
+    },
+
+    education: {
+      label: 'formación',
+      title: 'Formación y certificados',
+      degree: { title: 'Ingeniería de Sistemas e Informática', school: 'Universidad Tecnológica del Perú', place: 'Piura', period: 'mar. 2022 — actualidad · último año', points: ['Tercio superior', 'Miembro activo del grupo de programación competitiva', 'Asistente de docencia en Algorítmica (2024)'] },
+      certsTitle: 'Certificados',
+      highlight: { title: 'Hackathon Regional de Innovación Piura Innova 2026', org: 'Google Developer Group Piura' },
+      groups: [
+        { title: 'Ciberseguridad', org: 'Cisco', year: '2025', items: ['Introduction to Cybersecurity', 'Gestión de amenazas cibernéticas', 'Defensa de la red', 'Seguridad de terminales'] },
+        { title: 'Desarrollo', org: 'UTP', year: '2025', items: ['Python para datos', 'Apps web con Node.js y Angular'] },
+        { title: 'Idiomas', org: 'UTP', year: '2024', items: ['Inglés A2 (MCER)'] },
+      ],
+    },
+
+    contact: {
+      label: 'contacto',
+      title: '¿Construimos algo juntos?',
+      text: 'Busco seguir creciendo en equipos que construyan productos reales. Si tu equipo necesita a alguien que se encargue del backend sin perder de vista el producto completo, conversemos.',
+      offerTitle: 'Qué puedo aportar a tu equipo',
+      offers: [
+        { title: 'Backend y APIs', text: 'Servicios en Laravel o Spring Boot, bien modelados, probados y fáciles de mantener.' },
+        { title: 'Plataformas SaaS full-stack', text: 'De la base de datos a la interfaz en React, con multi-tenancy desde el inicio.' },
+        { title: 'Seguridad y cumplimiento', text: 'Experiencia llevando normas como NIST e ISO 27001 a lógica de negocio y reportes.' },
+      ],
+      infoTitle: 'Datos de contacto',
+      write: 'Escríbeme',
+      location: 'Piura, Perú (UTC−5)',
+      links: { email: 'Email', linkedin: 'LinkedIn', github: 'GitHub', cv: 'Descargar CV' },
+    },
+
+    footer: 'Hecho con React, Tailwind CSS y Vite.',
   },
+
   en: {
-    meta: { title: 'Miguel Yamunaqué | Junior Web Developer, Backend & Full-Stack', description: 'Portfolio of Miguel Yamunaqué Villegas, Junior Web Developer focused on Backend & Full-Stack, based in Piura, Peru.' },
+    meta: {
+      title: 'Miguel Yamunaqué · Junior Full-Stack Developer',
+      description: 'Junior Full-Stack Developer based in Piura, Peru. I build B2B SaaS platforms with Laravel, React and Spring Boot: multi-tenant architecture, REST APIs, automated testing and Docker deployments.',
+    },
     skip: 'Skip to content',
     langButton: 'Cambiar a español',
-    tagline: 'backend & full-stack',
-    nav: { main: 'Main navigation', social: 'Social and contact' },
-    dock: { works: 'projects', about: 'about', links: 'links', allWorks: 'All projects' },
-    links: { linkedin: 'LinkedIn', email: 'Email', github: 'GitHub', cv: 'Resume' },
+    menu: { open: 'Open menu', close: 'Close menu' },
+    nav: { label: 'Main navigation', about: 'About', skills: 'Expertise', experience: 'Experience', projects: 'Projects', education: 'Education', contact: 'Contact' },
+
     hero: {
-      hello: "Hi, I'm Miguel",
-      headline: ['I build solid backends and interfaces that just…', 'work'],
-      side: ['building products end-to-end,', 'from the database to deploy.'],
-      how: 'Okay so… how do I do that?',
-    },
-    projects: {
-      more: 'with more in the works',
-      live: 'live', code: 'view code', newTab: 'opens in a new tab',
-      cta: { live: 'View Project', tool: 'View Tool', code: 'View Code' },
-      items: {
-        nistrack: { title: 'Front-end architecture and development of a SaaS platform for cybersecurity (NIST) and resilience management.', org: 'Cloud Technologies', desc: 'GRC platform with NIST CSF 2.0 maturity assessments and server-side rendering.' },
-        termometro: { title: 'I built an end-to-end interactive assessment tool to measure business resilience.', org: 'Cloud Technologies', desc: '20-question diagnosis with a PDF report, based on NIST SP 800-34.', cta: 'tool' },
-        keptai: { title: 'I designed an AI-powered backend architecture in 48 hours to automate orders and quotes.', org: 'Piura Innova Hackathon · GDG Piura', desc: 'PostgreSQL relational schema and AI-assisted workflows, from zero to demo in 48 hours.' },
-        agrimonitor: { title: 'I deployed a real-time IoT architecture to monitor agricultural metrics.', org: 'Personal project', desc: 'Spring Boot and PostgreSQL API, containerized with Docker on an Ubuntu VPS.' },
-      },
-    },
-    story: {
-      title: ['I spend a lot of time', 'thinking about architecture'],
-      tap: 'tap on me',
-      intro: [{ t: 'I focus on building systems that are… ' }, { b: 'scalable' }, { t: ' to support growth, ' }, { b: 'secure' }, { t: ' to protect critical information, and ' }, { b: 'maintainable' }, { t: ' so the team can iterate fast.' }],
-      nodes: {
-        scalable: { label: 'Scalable', text: [{ b: 'Scalable:' }, { t: ' services and data designed to grow with the business, without rewriting everything.' }] },
-        ai: { label: 'AI', text: [{ b: 'AI:' }, { t: ' I integrate AI-assisted workflows to prototype, automate and decide faster.' }] },
-        secure: { label: 'Secure', text: [{ b: 'Secure:' }, { t: ' multi-tenant isolation and access policies to protect critical information.' }] },
-        maintainable: { label: 'Maintainable', text: [{ b: 'Maintainable:' }, { t: ' clear code and containerized deploys so the team can iterate without fear.' }] },
-      },
-    },
-    wall: {
-      burst: ['~ I ~', 'Experiment', 'A LOT'],
-      text: [{ h: 'I like poking at ideas early' }, { t: ': I set up Linux VPS with Docker, test multi-tenant isolation in Laravel and wire AI and scraping workflows with Python. Experiments help me learn fast, de-risk decisions and ' }, { h: 'find the version that actually works.' }],
-    },
-    closing: { note: "let's talk?", title: "Let's build something together?", write: 'Email me', location: 'Piura, Peru' },
-    works: {
-      title: 'All projects',
-      subtitle: 'Products in production, code, lab and AI.',
-      tabs: { live: 'In production', code: 'Code', lab: 'Lab', ai: 'AI' },
-      tabNotes: { live: 'Deployed products that real people use today.', code: 'Personal projects with open code on GitHub.', lab: 'Technical tests and self-taught experiments.', ai: 'Where artificial intelligence does part of the work.' },
-      lab: {
-        vps: { title: 'Linux VPS environments with Docker', org: 'Lab · DevOps', desc: 'Setting up Linux servers and deploying containers with Docker.' },
-        tenant: { title: 'Multi-tenant isolation in Laravel', org: 'Lab · Security', desc: 'Testing data isolation and per-tenant access policies.' },
-        ai: { title: 'AI workflows and web scraping', org: 'Lab · Python', desc: 'Integrating AI workflows and web data extraction with Python.' },
-      },
-    },
-    about: {
-      note: 'about me',
-      title: 'A little more about me',
-      intro: [{ t: 'Systems and Computer Engineering student (10th semester) and developer who enjoys building ' }, { h: 'end to end' }, { t: ': from database design and server security to the experience in the interface.' }],
-      caption: "that's me",
-      photoHint: 'photo soon',
-      items: [
-        { icon: 'burst', title: 'Today at Cloud Technologies', text: 'Operational resilience and GRC modules with Laravel and MySQL on a multi-tenant architecture, SPAs with Next.js and React, and Docker deployments.' },
-        { icon: 'spark', title: 'What I do with AI', text: 'AI-assisted development workflows and orchestration of regulatory assessment engines. In 48 hours I built the AI backend for KeptAI.' },
-        { icon: 'trophy', title: 'Achievements & certifications', text: 'Piura Innova 2026 Regional Hackathon (GDG Piura), Cisco cybersecurity certifications and Teaching Assistant in Algorithms (UTP).' },
+      label: 'about me',
+      name: 'Miguel Yamunaqué Villegas',
+      role: 'Junior Full-Stack Developer · Backend & SaaS platforms',
+      photoAlt: 'Photo of Miguel Yamunaqué',
+      bio: [
+        [{ t: "I'm a full-stack developer and a final-year Systems and Computer Engineering student. I work at " }, { b: 'Cloud Technologies' }, { t: ', where I build ' }, { b: 'NISTRACK' }, { t: ', a multi-tenant governance, risk and compliance (GRC) SaaS platform that measures companies’ cybersecurity posture against ' }, { b: 'NIST CSF 2.0 and ISO/IEC 27001' }, { t: '.' }],
+        [{ t: 'My strength is the backend: ' }, { b: 'RESTful APIs in Laravel' }, { t: ' with strict data isolation between companies, assessment engines that turn standards into business logic, and server-generated ' }, { b: 'PDF audit reports' }, { t: '. On the front end I work with ' }, { b: 'React, Next.js and TypeScript' }, { t: '.' }],
+        [{ t: 'I work with team discipline: ' }, { b: 'automated tests' }, { t: ' (PHPUnit and Vitest), static analysis with PHPStan, feature → develop → main branches and reviewed pull requests. I use AI as a tool to speed up development, never as a substitute for judgment or code quality.' }],
       ],
-      skillsTitle: 'My stack',
-      groups: { languages: 'Languages', backend: 'Backend', frontend: 'Frontend', data: 'Databases', mobile: 'Mobile', cloud: 'Cloud & DevOps', testing: 'Testing & QA', architecture: 'Architecture & paradigms' },
-      experienceTitle: 'Experience',
+      ctaProjects: 'View projects',
+      ctaCv: 'Download resume',
+      terminal: [{ cmd: 'whoami' }, { out: 'miguel-yamunaque · full-stack developer jr.' }, { cmd: 'cat stack.txt' }, ...terminalStack, { cmd: 'pwd' }, { out: '/piura/peru' }],
+    },
+
+    stats: [
+      { value: '2', label: 'products in production at Cloud Technologies' },
+      { value: '7', label: 'types of PDF audit reports in NISTRACK' },
+      { value: '48 h', label: 'from zero to demo with KeptAI (GDG Piura Hackathon)' },
+      { value: '9', label: 'certificates (Cisco, UTP, GDG)' },
+    ],
+
+    skills: {
+      label: 'expertise',
+      title: 'Technical expertise',
+      subtitle: 'What I can do and back up with real projects.',
+      items: [
+        { icon: 'server', title: 'Backend & REST APIs', text: 'APIs in Laravel and Spring Boot with RESTful controllers, validation, Sanctum or JWT authentication and immediate saving so no data is lost.' },
+        { icon: 'tenant', title: 'Multi-tenancy & security', text: 'Per-company data isolation with scopes and Policies, module-level permissions, roles and 2FA.' },
+        { icon: 'compliance', title: 'Regulatory compliance', text: 'Assessment and maturity engines on NIST CSF 2.0, NIST SP 800-34 and ISO/IEC 27001, with risk matrices and traceability.' },
+        { icon: 'reports', title: 'Reports & data', text: 'Server-generated PDF reports with charts (Chart.js / QuickChart) and relational modeling in MySQL and PostgreSQL.' },
+        { icon: 'frontend', title: 'Front end', text: 'SPAs in React, Next.js and TypeScript with Tailwind and shadcn/ui; components with async search and state that persists across sessions.' },
+        { icon: 'quality', title: 'Quality & delivery', text: 'PHPUnit, Vitest and PHPStan; Git flow with pull requests; Docker, Linux VPS and CI with GitHub Actions.' },
+      ],
+      main: 'Core stack',
+      more: 'Also worked with',
+    },
+
+    experience: {
+      label: 'experience',
+      title: 'Professional experience',
       current: 'current',
       jobs: [
-        { role: 'Full-Stack Developer', company: 'Cloud Technologies E.I.R.L.', place: 'Piura, Peru', period: 'Mar 2026 — Present', current: true, points: [
-          [{ b: 'Backend & multi-tenant isolation:' }, { t: ' designed and orchestrated the GRC operational resilience module with Laravel and MySQL, with strict data isolation between organizations through Laravel Policies.' }],
-          [{ b: 'Front-end & SSR:' }, { t: ' built an end-to-end SPA with Next.js, TypeScript and Tailwind v4, with resilient state persistence for multi-session assessments and fixes for hydration mismatches.' }],
-          [{ b: 'NIST cybersecurity:' }, { t: ' implemented an assessment engine based on NIST SP 800-34 and 800-30, with immediate-save RESTful endpoints and official early-warning integrations (SENAMHI, ENFEN).' }],
-          [{ b: 'Reports & AI:' }, { t: ' orchestrated server-rendered PDF audit report exports and led the architecture under an AI-assisted development workflow.' }],
-        ] },
-        { role: 'Customer Service Assistant', company: 'Promart Homecenter', place: 'Piura, Peru', period: 'Aug 2023 — Sep 2026', points: [
-          [{ b: 'Customer service:' }, { t: ' handled customer inquiries and guidance directly, ensuring a smooth and positive shopping experience.' }],
-          [{ b: 'Soft skills:' }, { t: ' strengthened key interpersonal skills such as effective communication, teamwork, empathy and quick resolution of everyday issues in a high-demand retail environment.' }],
-        ] },
+        {
+          role: 'Full-Stack Developer', org: 'Cloud Technologies E.I.R.L.', place: 'Piura, Peru', period: 'Mar 2026 — present', current: true,
+          intro: [{ t: 'Peruvian cybersecurity company. I build ' }, { b: 'NISTRACK' }, { t: ', a multi-tenant GRC SaaS platform, and its public module, the ' }, { b: 'Resilience Thermometer' }, { t: '.' }],
+          points: [
+            { b: 'Compliance assessment', t: 'built the logic that assesses NIST CSF 2.0 and maps it to ISO/IEC 27001:2022 Annex A, computing the maturity level (0 to 4) and the gap to the target level.' },
+            { b: 'Asset catalog v2', t: 'separated the closed asset taxonomy from the global brand and model catalog, with a moderation queue that merges duplicates and a criticality wizard (confidentiality, integrity and availability).' },
+            { b: 'Risk', t: 'a matrix that crosses assets, threats and vulnerabilities and scores risk by likelihood and impact.' },
+            { b: 'PDF report engine', t: '7 audit reports (full report, progress radar, NIST summary, assets, risks, ISO 27001 compliance and Statement of Applicability), with charts rendered to images on the server.' },
+            { b: 'Multi-tenant isolation & security', t: 'per-company filters across every module and part of the security audit and remediation of cross-tenant isolation, writing tests first and one commit per fix.' },
+            { b: 'Resilience Thermometer', t: 'Laravel API with immediate per-answer saving (resumable across sessions), isolation with Policies and roles, and a Next.js / TanStack Start front end in TypeScript.' },
+          ],
+          tags: ['Laravel', 'PHP', 'MySQL', 'React', 'TypeScript', 'Next.js', 'PHPUnit', 'Vitest', 'PHPStan'],
+        },
       ],
-      educationTitle: 'Education',
-      education: { degree: 'Systems and Computer Engineering', school: 'Universidad Tecnológica del Perú', place: 'Piura, Peru', period: 'Mar 2022 — Present', points: ['Top third of the class', 'Active member of the competitive programming group'] },
-      certsTitle: 'Certificates',
-      certs: [
-        { title: 'Piura Innova 2026 Regional Innovation Hackathon', org: 'Google Developer Group Piura', year: '2026', highlight: true },
-        { title: 'Introduction to Cybersecurity', org: 'Cisco', year: '2025' },
-        { title: 'Cyber Threat Management', org: 'Cisco', year: '2025' },
-        { title: 'Network Defense', org: 'Cisco', year: '2025' },
-        { title: 'Endpoint Security', org: 'Cisco', year: '2025' },
-        { title: 'Python for data', org: 'UTP', year: '2025' },
-        { title: 'Web apps with Node.js and Angular', org: 'UTP', year: '2025' },
-        { title: 'Teaching Assistant in Algorithms', org: 'UTP', year: '2024' },
-        { title: 'English A2 (CEFR)', org: 'UTP', year: '2024' },
-      ],
-      cv: { note: 'all on one page', title: 'My resume', text: 'Experience, education, skills and certificates as a PDF.', open: 'View resume', download: 'Download PDF' },
-      dragHint: 'drag me',
+      otherTitle: 'Other experience',
+      other: { role: 'Customer Service Assistant', org: 'Promart Homecenter', place: 'Piura', period: 'Aug 2023 — Sep 2026', text: 'Front-line customer support and issue resolution under pressure in a high-demand retail environment, working toward sales goals and service-quality metrics.' },
     },
-    footer: 'Built with React, Tailwind CSS and Motion.',
+
+    projects: {
+      label: 'projects',
+      title: 'Featured projects',
+      subtitle: 'Products in production and open-source projects. Each one has its own technical case study.',
+      filters: { all: 'All', live: 'In production', code: 'Code', ai: 'AI' },
+      filtersLabel: 'Filter projects',
+      cta: { case: 'View case study', live: 'View live', tool: 'Open tool', code: 'Code' },
+      newTab: 'opens in a new tab',
+      shot: 'Screenshot of',
+      items: {
+        nistrack: { org: 'Cloud Technologies', summary: 'Multi-tenant SaaS platform that measures companies’ cybersecurity posture against NIST CSF 2.0 and ISO 27001.' },
+        termometro: { org: 'Cloud Technologies', summary: 'A 20-question assessment that measures how prepared a company is for the El Niño phenomenon.', liveCta: 'tool' },
+        keptai: { org: 'Piura Innova Hackathon · GDG Piura', summary: 'AI-powered backend to automate orders and quotes, from zero to demo in 48 hours with a team of 4.' },
+        agrimonitor: { org: 'Personal project', summary: 'IoT API in production that combines ESP32 sensors and computer vision to detect anthracnose in avocado crops.' },
+      },
+    },
+
+    lab: {
+      label: 'lab',
+      title: 'Lab',
+      subtitle: 'Experiments to learn fast and reduce risk before using something in production.',
+      items: {
+        vps: { area: 'DevOps', title: 'Linux servers with Docker', text: 'Setting up Linux VPS and deploying containerized services with Docker Compose.' },
+        tenant: { area: 'Security', title: 'Multi-tenant isolation in Laravel', text: 'Testing data isolation and per-tenant access policies.' },
+        ai: { area: 'Python', title: 'AI workflows and web scraping', text: 'Web data extraction and AI model integration with Python.' },
+      },
+    },
+
+    education: {
+      label: 'education',
+      title: 'Education & certificates',
+      degree: { title: 'Systems and Computer Engineering', school: 'Universidad Tecnológica del Perú', place: 'Piura', period: 'Mar 2022 — present · final year', points: ['Top third of the class', 'Active member of the competitive programming group', 'Teaching assistant in Algorithms (2024)'] },
+      certsTitle: 'Certificates',
+      highlight: { title: 'Piura Innova 2026 Regional Innovation Hackathon', org: 'Google Developer Group Piura' },
+      groups: [
+        { title: 'Cybersecurity', org: 'Cisco', year: '2025', items: ['Introduction to Cybersecurity', 'Cyber Threat Management', 'Network Defense', 'Endpoint Security'] },
+        { title: 'Development', org: 'UTP', year: '2025', items: ['Python for data', 'Web apps with Node.js and Angular'] },
+        { title: 'Languages', org: 'UTP', year: '2024', items: ['English A2 (CEFR)'] },
+      ],
+    },
+
+    contact: {
+      label: 'contact',
+      title: "Let's build something together?",
+      text: "I'm looking to keep growing in teams that build real products. If your team needs someone to own the backend without losing sight of the whole product, let's talk.",
+      offerTitle: 'What I can bring to your team',
+      offers: [
+        { title: 'Backend & APIs', text: 'Services in Laravel or Spring Boot that are well modeled, tested and easy to maintain.' },
+        { title: 'Full-stack SaaS platforms', text: 'From the database to a React interface, with multi-tenancy from day one.' },
+        { title: 'Security & compliance', text: 'Experience turning standards like NIST and ISO 27001 into business logic and reports.' },
+      ],
+      infoTitle: 'Contact details',
+      write: 'Email me',
+      location: 'Piura, Peru (UTC−5)',
+      links: { email: 'Email', linkedin: 'LinkedIn', github: 'GitHub', cv: 'Download resume' },
+    },
+
+    footer: 'Built with React, Tailwind CSS and Vite.',
   },
 }

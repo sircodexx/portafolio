@@ -1,28 +1,23 @@
 @import "tailwindcss";
 @import "./theme.css";
-@config "../tailwind.config.js";
-@theme {
-  --color-paper: #f4f4f1;
-  --color-ink: #2e2e2e;
-  --color-rust: #b2421a;
-  --color-leaf: #5ec41b;
-}
+
 @layer base {
-  :root { color-scheme: light; font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-  html { scroll-padding-top: 5rem; }
+  :root { color-scheme: dark; font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
   html, body { overflow-x: clip; }
+  /* Fondo con un brillo tenue del acento y una retícula de puntos casi invisible. */
   body {
-    @apply m-0 min-w-[320px] bg-paper font-sans text-ink;
-    background-image: linear-gradient(rgba(30, 30, 30, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(30, 30, 30, 0.05) 1px, transparent 1px);
-    background-size: 22px 22px;
+    @apply m-0 min-w-[320px] bg-bg font-sans text-fg;
+    background-image:
+      radial-gradient(60rem 30rem at 85% -10%, color-mix(in srgb, var(--p-accent) 9%, transparent), transparent 70%),
+      radial-gradient(color-mix(in srgb, var(--p-fg) 7%, transparent) 1px, transparent 1px);
+    background-size: auto, 24px 24px;
+    background-repeat: no-repeat, repeat;
   }
-  ::selection { @apply bg-rust text-white; }
-  a:focus-visible, button:focus-visible { @apply rounded outline-2 outline-offset-4 outline-rust; }
-}
-@layer components {
-  .hand { @apply font-hand leading-tight text-zinc-500; }
-  .display { @apply font-display font-bold tracking-[-0.045em] text-ink; }
+  ::selection { @apply bg-accent text-accent-ink; }
+  a:focus-visible, button:focus-visible { @apply rounded-md outline-2 outline-offset-4 outline-accent; }
 }
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }

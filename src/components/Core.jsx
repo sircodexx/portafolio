@@ -25,7 +25,7 @@ export function LangProvider({ children }) {
   return <LangContext.Provider value={{ lang, setLang, t, pick }}>{children}</LangContext.Provider>
 }
 
-// Texto con tramos en negrita ({ b }) o resaltados en óxido ({ h }).
+// Texto con tramos destacados ({ b }) y normales ({ t }).
 export function Rich({ parts }) {
-  return parts.map((part, i) => part.b ? <b key={i} className="font-bold text-ink">{part.b}</b> : part.h ? <mark key={i} className="box-decoration-clone bg-rust px-1 font-semibold text-white">{part.h}</mark> : <span key={i}>{part.t}</span>)
+  return parts.map((part, i) => part.b ? <b key={i} className="font-semibold text-fg">{part.b}</b> : <span key={i}>{part.t}</span>)
 }

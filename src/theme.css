@@ -1,7 +1,5 @@
-/* Tokens del diseño v2. Cada paleta define las mismas variables --p-*;
-   se elige con data-palette en <html> (a = grafito + ámbar, b = azul noche + cielo, c = pizarra + lima). */
-:root,
-[data-palette="a"] {
+/* Tokens del diseño v2: paleta Grafito + Ámbar. Cambiar la paleta es cambiar este bloque. */
+:root {
   --p-bg: #0f1115;
   --p-surface: #171a21;
   --p-surface-2: #1e222b;
@@ -11,28 +9,6 @@
   --p-accent: #f5a524;
   --p-accent-ink: #1a1206;
   --p-accent-2: #7aa2f7;
-}
-[data-palette="b"] {
-  --p-bg: #0b1220;
-  --p-surface: #111a2c;
-  --p-surface-2: #17223a;
-  --p-line: #24304a;
-  --p-fg: #e2e8f0;
-  --p-muted: #94a3b8;
-  --p-accent: #38bdf8;
-  --p-accent-ink: #04121c;
-  --p-accent-2: #a78bfa;
-}
-[data-palette="c"] {
-  --p-bg: #111315;
-  --p-surface: #181b1e;
-  --p-surface-2: #1f2326;
-  --p-line: #2b3034;
-  --p-fg: #ececec;
-  --p-muted: #a1a7ad;
-  --p-accent: #a3e635;
-  --p-accent-ink: #12180a;
-  --p-accent-2: #22d3ee;
 }
 
 @theme inline {
@@ -45,20 +21,6 @@
   --color-accent: var(--p-accent);
   --color-accent-ink: var(--p-accent-ink);
   --color-accent-2: var(--p-accent-2);
+  --font-sans: Inter, "Segoe UI", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
-  --font-inter: Inter, "Segoe UI", system-ui, sans-serif;
 }
-
-/* Lienzo v2: fondo con un brillo tenue del acento y una retícula de puntos casi invisible. */
-.v2 {
-  color-scheme: dark;
-  background-color: var(--p-bg);
-  background-image:
-    radial-gradient(60rem 30rem at 85% -10%, color-mix(in srgb, var(--p-accent) 9%, transparent), transparent 70%),
-    radial-gradient(color-mix(in srgb, var(--p-fg) 7%, transparent) 1px, transparent 1px);
-  background-size: auto, 24px 24px;
-  color: var(--p-fg);
-  font-family: var(--font-inter);
-}
-.v2 ::selection { background: var(--p-accent); color: var(--p-accent-ink); }
-.v2 a:focus-visible, .v2 button:focus-visible { outline: 2px solid var(--p-accent); outline-offset: 3px; border-radius: 6px; }
